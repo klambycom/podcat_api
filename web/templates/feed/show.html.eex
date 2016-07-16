@@ -1,0 +1,28 @@
+<h2>Show feed</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @feed.name %>
+  </li>
+
+  <li>
+    <strong>Homepage:</strong>
+    <%= @feed.homepage %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @feed.description %>
+  </li>
+
+  <li>
+    <strong>Rss feed:</strong>
+    <%= @feed.rss_feed %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: feed_path(@conn, :edit, @feed) %>
+<%= link "Back", to: feed_path(@conn, :index) %>
