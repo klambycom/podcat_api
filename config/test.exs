@@ -17,3 +17,6 @@ config :reader, Reader.Repo,
   database: "reader_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Configure HTTP client
+config :reader, :http_client, Reader.HTTPoisonMock

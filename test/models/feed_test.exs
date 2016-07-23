@@ -15,4 +15,15 @@ defmodule Reader.FeedTest do
     changeset = Feed.changeset(%Feed{}, @invalid_attrs)
     refute changeset.valid?
   end
+
+  test "download and parse RSS 2.0 file" do
+    feed = Feed.download("http://foobar.com/rss_feed.xml")
+
+    assert feed == %{
+      description: "A blog.",
+      homepage: "http://klamby.com",
+      name: "Test Blog",
+      rss_feed: "http://foobar.com/rss_feed.xml"
+    }
+  end
 end
