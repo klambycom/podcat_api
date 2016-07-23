@@ -1,5 +1,5 @@
 defmodule Reader.Feed.Parser.RSS2 do
-  alias Reader.{Xml, Feed}
+  alias Reader.Xml
 
   @doc """
   Check if the XML-document is in the RSS2-format.
@@ -42,18 +42,21 @@ defmodule Reader.Feed.Parser.RSS2 do
       ...>   \"\"\"
       ...> )
       ...> |> Reader.Feed.Parser.RSS2.parse
-      %Reader.Feed{
+      %{
         name: "Klamby Blog",
         homepage: "https://klamby.com",
-        description: "Klamby Awesome Blog"
+        description: "Klamby Awesome Blog",
+        rss_feed: nil
       }
   """
-  def parse(document),
-    do: %Feed{
+  def parse(document) do
+    %{
           name: document |> channel("./title") |> Xml.text,
           homepage: document |> channel("./link") |> Xml.text,
-          description: document |> channel("./description") |> Xml.text
+          description: document |> channel("./description") |> Xml.text,
+          rss_feed: nil
         }
+  end
 
   defp channel(document, path), do: document |> Xml.xpath("/rss/channel") |> Xml.xpath(path)
 end
