@@ -16,7 +16,7 @@ defmodule Reader.Xml do
   def from_string(xml_string, options \\ []) do
     {doc, []} =
       xml_string
-      |> String.to_char_list
+      |> :erlang.bitstring_to_list
       |> :xmerl_scan.string(options)
 
     doc
