@@ -16,7 +16,7 @@ defmodule Reader.Xml do
   def from_string(xml_string, options \\ []) do
     {doc, []} =
       xml_string
-      |> :erlang.bitstring_to_list
+      |> String.to_char_list
       |> :xmerl_scan.string(options)
 
     doc
@@ -34,24 +34,26 @@ defmodule Reader.Xml do
       ...> Reader.Xml.text(xml_node)
       "Klamby Blog"
 
-  Text from the first XML-element is returned if the element is in a list:
+  Text from the all XML-elements is returned in a list:
 
       iex> Reader.Xml.from_string("<channel><title>Klamby Blog</title></channel>")
       ...> |> Reader.Xml.xpath("/channel/title")
       ...> |> Reader.Xml.text
       "Klamby Blog"
 
-  Or `nil` if there is no text:
+  Or empty string if there is no text:
 
       iex> Reader.Xml.from_string("<channel><title></title></channel>")
       ...> |> Reader.Xml.xpath("/channel/title")
       ...> |> Reader.Xml.text
-      nil
+      ""
   """
-  def text([]), do: []
-  def text([xml_node]), do: text(xml_node)
+  def text(xmlElement(content: content)), do: text(content, "")
+  def text([xmlElement(content: content)]), do: text(content, "")
 
-  def text(xml_node), do: xml_node |> xpath("./text()") |> extract_text
+  defp text([], str), do: str
+  defp text([xmlText(value: value) | rest], str),
+    do: text(rest, str <> List.to_string(value))
 
   @doc """
   Get a attribute from a XML-node. Returns `nil` if the attribute is missing.
@@ -72,7 +74,7 @@ defmodule Reader.Xml do
       ...> |> Reader.Xml.attr("version")
       "2.0"
   """
-  def attr([], _), do: []
+  def attr([], _), do: ""
   def attr([xml_node], name), do: attr(xml_node, name)
 
   def attr(xml_node, name), do: xml_node |> xpath("./@#{name}") |> extract_attr
@@ -88,9 +90,6 @@ defmodule Reader.Xml do
         |> String.to_charlist
         |> :xmerl_xpath.string(xml_node)
 
-  defp extract_text([xmlText(value: value)]), do: List.to_string(value)
-  defp extract_text(_), do: nil
-
   defp extract_attr([xmlAttribute(value: value)]), do: List.to_string(value)
-  defp extract_attr(_), do: nil
+  defp extract_attr(_), do: ""
 end
