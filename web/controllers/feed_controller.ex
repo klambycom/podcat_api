@@ -3,51 +3,48 @@ defmodule Reader.FeedController do
 
   alias Reader.Feed
 
+  plug :scrub_params, "feed" when action in [:create]
+
   def index(conn, _params) do
     feeds = Repo.all(Feed)
-    render(conn, "index.html", feeds: feeds)
+    render(conn, "index.json", feeds: feeds)
   end
 
-  def new(conn, _params) do
-    changeset = Feed.changeset(%Feed{})
-    render(conn, "new.html", changeset: changeset)
-  end
-
-  def create(conn, %{"feed" => feed_params}) do
+  def create(conn, %{"feed" => url}) do
+    feed_params = Feed.download(url)
     changeset = Feed.changeset(%Feed{}, feed_params)
 
     case Repo.insert(changeset) do
-      {:ok, _feed} ->
+      {:ok, feed} ->
         conn
-        |> put_flash(:info, "Feed created successfully.")
-        |> redirect(to: feed_path(conn, :index))
+        |> put_status(:created)
+        |> put_resp_header("location", feed_path(conn, :show, feed))
+        |> render("show.json", feed: feed)
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Reader.ChangesetView, "error.json", changeset: changeset)
     end
   end
 
   def show(conn, %{"id" => id}) do
     feed = Repo.get!(Feed, id)
-    render(conn, "show.html", feed: feed)
+    render(conn, "show.json", feed: feed)
   end
 
-  def edit(conn, %{"id" => id}) do
+  def update(conn, %{"id" => id}) do
     feed = Repo.get!(Feed, id)
-    changeset = Feed.changeset(feed)
-    render(conn, "edit.html", feed: feed, changeset: changeset)
-  end
-
-  def update(conn, %{"id" => id, "feed" => feed_params}) do
-    feed = Repo.get!(Feed, id)
+    feed_params = Feed.download(feed.rss_feed)
     changeset = Feed.changeset(feed, feed_params)
 
     case Repo.update(changeset) do
       {:ok, feed} ->
         conn
-        |> put_flash(:info, "Feed updated successfully.")
-        |> redirect(to: feed_path(conn, :show, feed))
+        |> render("show.json", feed: feed)
       {:error, changeset} ->
-        render(conn, "edit.html", feed: feed, changeset: changeset)
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Reader.ChangesetView, "error.json", changeset: changeset)
     end
   end
 
@@ -59,7 +56,6 @@ defmodule Reader.FeedController do
     Repo.delete!(feed)
 
     conn
-    |> put_flash(:info, "Feed deleted successfully.")
-    |> redirect(to: feed_path(conn, :index))
+    |> send_resp(:no_content, "")
   end
 end

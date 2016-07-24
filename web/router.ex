@@ -17,11 +17,11 @@ defmodule Reader.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    resources "/feeds", FeedController
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Reader do
-  #   pipe_through :api
-  # end
+  scope "/api", Reader do
+    pipe_through :api
+
+    resources "/feeds", FeedController
+  end
 end
