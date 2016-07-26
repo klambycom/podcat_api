@@ -28,7 +28,8 @@ defmodule Reader.Mixfile do
         :gettext,
         :phoenix_ecto,
         :postgrex,
-        :httpoison
+        :httpoison,
+        :comeonin
       ]
     ]
   end
@@ -50,7 +51,9 @@ defmodule Reader.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:httpoison, "~> 0.9.0"}
+      {:httpoison, "~> 0.9.0"},
+      {:comeonin, "~> 2.5"},
+      {:guardian, "~> 0.12.0"}
     ]
   end
 

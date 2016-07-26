@@ -16,7 +16,19 @@
       <header class="header">
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
-            <li><a href="http://www.phoenixframework.org/docs">Get Started</a></li>
+            <%= unless current_user(@conn) do %>
+              <li><%= link gettext("Login"), to: login_path(@conn, :new) %></li>
+            <% else %>
+              <li>
+                <%=
+                  link(
+                    gettext("Logout"),
+                    to: logout_path(@conn, :delete),
+                    method: :delete
+                  )
+                %>
+              </li>
+            <% end %>
           </ul>
         </nav>
         <span class="logo"></span>
@@ -24,6 +36,10 @@
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+
+      <%= if current_user(@conn) do %>
+        <h2><%= current_user(@conn).name %></h2>
+      <% end %>
 
       <main role="main">
         <%= render @view_module, @view_template, assigns %>

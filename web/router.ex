@@ -9,14 +9,26 @@ defmodule Reader.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :browser_session do
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.LoadResource
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", Reader do
-    pipe_through :browser # Use the default browser stack
+    pipe_through [:browser, :browser_session]
 
     get "/", PageController, :index
+
+    get "/login", SessionController, :new, as: :login
+    post "/login", SessionController, :create, as: :login
+
+    delete "/logout", SessionController, :delete, as: :logout
+
+    resources "/users", UserController
   end
 
   scope "/api", Reader do

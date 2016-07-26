@@ -25,6 +25,13 @@ config :logger, :console,
 # Configure HTTP client
 config :reader, :http_client, HTTPoison
 
+# Configure Guardian
+config :guardian, Guardian,
+  issuer: "Reader",
+  ttl: {30, :days},
+  secret_key: "d+cGiffjBJ3lDHWDhHfAW0nNoum6KvpBJwSz84kPn5iKl8jtDKNdDQaVtGJjhjls",
+  serializer: Reader.User.Serializer
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
