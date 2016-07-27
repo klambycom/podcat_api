@@ -18,6 +18,11 @@ defmodule Reader.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :api_auth do
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.LoadResource
+  end
+
   scope "/", Reader do
     pipe_through [:browser, :browser_session]
 
@@ -32,8 +37,13 @@ defmodule Reader.Router do
   end
 
   scope "/api", Reader do
-    pipe_through :api
+    pipe_through [:api, :api_auth]
+
+    post "/login", Api.SessionController, :create, as: :login
+    delete "/logout", Api.SessionController, :delete, as: :logout
 
     resources "/feeds", FeedController
+
+    resources "/users", Api.UserController, except: [:new, :edit]
   end
 end
