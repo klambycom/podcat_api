@@ -42,8 +42,13 @@ defmodule Reader.Router do
     post "/login", Api.SessionController, :create, as: :login
     delete "/logout", Api.SessionController, :delete, as: :logout
 
-    resources "/feeds", FeedController
+    resources "/feeds", FeedController do
+      post "/subscribe", SubscriptionController, :create
+      delete "/unsubscribe", SubscriptionController, :delete
+    end
 
-    resources "/users", Api.UserController, except: [:new, :edit]
+    resources "/users", Api.UserController, except: [:new, :edit] do
+      resources "/subscriptions", SubscriptionController, only: [:index]
+    end
   end
 end
