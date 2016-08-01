@@ -37,4 +37,10 @@ defmodule Reader.Api.SessionController do
     conn
     |> put_status(200)
   end
+
+  @doc "Show error message if the user is not authorized."
+  def unauthenticated(conn, _params) do
+    conn
+    |> send_resp(:unauthorized, "")
+  end
 end
