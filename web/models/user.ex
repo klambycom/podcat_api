@@ -11,6 +11,8 @@ defmodule Reader.User do
     field :password_digest, :string
     field :password, :string, virtual: true
 
+    many_to_many :subscriptions, Reader.Feed, join_through: Reader.Subscription
+
     timestamps
   end
 
@@ -43,6 +45,14 @@ defmodule Reader.User do
   def find_by_email(email) do
     from a in __MODULE__,
     where: a.email == ^email
+  end
+
+  @doc """
+  Get user and subscriptions.
+  """
+  def subscriptions do
+    from u in __MODULE__,
+      preload: :subscriptions
   end
 
   defp put_pass_hash(changeset) do

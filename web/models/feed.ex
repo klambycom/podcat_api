@@ -12,7 +12,9 @@ defmodule Reader.Feed do
     field :description, :string
     field :rss_feed, :string
 
-    timestamps()
+    many_to_many :users, Reader.User, join_through: Reader.Subscription
+
+    timestamps
   end
 
   @required_fields ~w(name homepage description rss_feed)
