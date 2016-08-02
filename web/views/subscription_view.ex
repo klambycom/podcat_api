@@ -1,8 +1,6 @@
 defmodule Reader.SubscriptionView do
   use Reader.Web, :view
 
-  alias Reader.Subscription
-
   def render("index.json", %{subscriptions: subscriptions, user: user, conn: conn}),
     do: %{
       data: render_many(
