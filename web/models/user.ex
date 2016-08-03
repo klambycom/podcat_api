@@ -1,6 +1,8 @@
 defmodule Reader.User do
   use Reader.Web, :model
 
+  alias Reader.{Feed, Subscription}
+
   @email_regex ~r/\S+@\S+\.\S+/
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -11,7 +13,7 @@ defmodule Reader.User do
     field :password_digest, :string
     field :password, :string, virtual: true
 
-    many_to_many :subscriptions, Reader.Feed, join_through: Reader.Subscription
+    many_to_many :subscriptions, Feed, join_through: Subscription
 
     timestamps
   end
@@ -53,6 +55,15 @@ defmodule Reader.User do
   def subscriptions do
     from u in __MODULE__,
       preload: :subscriptions
+  end
+
+  @doc """
+  Get users, ordered by inserted at, subscribed to a specific feed.
+  """
+  def subscribed_to(%Feed{id: feed_id}) do
+    from u in __MODULE__,
+      join: s in Subscription, on: s.user_id == u.id and s.feed_id == ^feed_id,
+      order_by: [desc: s.inserted_at]
   end
 
   defp put_pass_hash(changeset) do

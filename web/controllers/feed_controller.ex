@@ -1,7 +1,7 @@
 defmodule Reader.FeedController do
   use Reader.Web, :controller
 
-  alias Reader.Feed
+  alias Reader.{Feed, User}
 
   plug :scrub_params, "feed" when action in [:create]
 
@@ -29,7 +29,13 @@ defmodule Reader.FeedController do
 
   def show(conn, %{"id" => id}) do
     feed = Repo.get!(Feed.summary, id)
-    render(conn, "show.json", feed: feed)
+
+    users =
+      User.subscribed_to(feed)
+      |> limit(5)
+      |> Repo.all
+
+    render(conn, "show.json", feed: feed, users: users)
   end
 
   def update(conn, %{"id" => id}) do

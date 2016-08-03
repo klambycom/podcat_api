@@ -1,9 +1,11 @@
 defmodule Reader.FeedView do
   use Reader.Web, :view
 
+  alias Reader.Api.UserView
+
   def render("index.json", %{feeds: feeds, conn: conn}),
     do: %{
-      data: render_many(feeds, Reader.FeedView, "feed.json", conn: conn),
+      data: render_many(feeds, __MODULE__, "feed.json", conn: conn),
       links: %{
         self: feed_url(conn, :index)
       },
@@ -12,29 +14,34 @@ defmodule Reader.FeedView do
       }
     }
 
-  def render("show.json", %{feed: feed, conn: conn}),
+  def render("show.json", %{feed: feed, users: users, conn: conn}),
     do: %{
-      data: render_one(feed, Reader.FeedView, "feed.json", conn: conn),
+      data: render_one(feed, __MODULE__, "feed.json", users: users, conn: conn),
       links: %{
         self: feed_url(conn, :show, feed)
       }
     }
 
-  def render("feed.json", %{feed: feed, conn: conn}),
-    do: %{
-          title: feed.name,
-          homepage: feed.homepage,
-          description: feed.description,
-          rss: feed.rss_feed,
-          meta: %{
-            inserted_at: feed.inserted_at,
-            updated_at: feed.updated_at,
-            subscriber_count: feed.subscriber_count
-          },
-          links: %{
-            self: feed_url(conn, :show, feed),
-            delete: feed_url(conn, :delete, feed),
-            related: "TODO: posts"
-          }
-        }
+  def render("feed.json", %{feed: feed, conn: conn} = data) do
+    users = Map.get(data, :users, [])
+
+    %{
+      title: feed.name,
+      homepage: feed.homepage,
+      description: feed.description,
+      rss: feed.rss_feed,
+      users: render_many(users, UserView, "user.json", conn: conn),
+      meta: %{
+        inserted_at: feed.inserted_at,
+        updated_at: feed.updated_at,
+        nr_of_subscribers: feed.subscriber_count,
+        users_count: length(users)
+      },
+      links: %{
+        self: feed_url(conn, :show, feed),
+        delete: feed_url(conn, :delete, feed),
+        related: "TODO: posts"
+      }
+    }
+  end
 end
