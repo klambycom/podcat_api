@@ -25,6 +25,7 @@ defmodule Reader.Subscription do
     |> cast(params, @required_fields, @optional_fields)
     |> foreign_key_constraint(:user_id)
     |> foreign_key_constraint(:feed_id)
+    |> unique_constraint(:feed, name: :user_id_feed_id, message: "already subscribed")
   end
 
   @doc """
