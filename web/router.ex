@@ -24,5 +24,7 @@ defmodule Reader.Router do
     resources "/users", Api.UserController, except: [:new, :edit] do
       resources "/subscriptions", SubscriptionController, only: [:index]
     end
+
+    get "/search", SearchController, :search
   end
 end
