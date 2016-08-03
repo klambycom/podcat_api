@@ -6,7 +6,7 @@ defmodule Reader.FeedController do
   plug :scrub_params, "feed" when action in [:create]
 
   def index(conn, _params) do
-    feeds = Repo.all(Feed)
+    feeds = Repo.all(Feed.summary)
     render(conn, "index.json", feeds: feeds)
   end
 
@@ -28,7 +28,7 @@ defmodule Reader.FeedController do
   end
 
   def show(conn, %{"id" => id}) do
-    feed = Repo.get!(Feed, id)
+    feed = Repo.get!(Feed.summary, id)
     render(conn, "show.json", feed: feed)
   end
 

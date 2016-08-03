@@ -26,8 +26,11 @@ defmodule Reader.FeedView do
           homepage: feed.homepage,
           description: feed.description,
           rss: feed.rss_feed,
-          inserted_at: feed.inserted_at,
-          updated_at: feed.updated_at,
+          meta: %{
+            inserted_at: feed.inserted_at,
+            updated_at: feed.updated_at,
+            subscriber_count: feed.subscriber_count
+          },
           links: %{
             self: feed_url(conn, :show, feed),
             delete: feed_url(conn, :delete, feed),

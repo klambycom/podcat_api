@@ -11,6 +11,7 @@ defmodule Reader.Feed do
     field :homepage, :string
     field :description, :string
     field :rss_feed, :string
+    field :subscriber_count, :integer, virtual: true
 
     many_to_many :users, Reader.User, join_through: Reader.Subscription
 
@@ -40,5 +41,15 @@ defmodule Reader.Feed do
       |> RSS2.parse
 
     %{feed | rss_feed: url}
+  end
+
+  @doc """
+  Get summary of the feed, with number of subscribers.
+  """
+  def summary do
+    from f in __MODULE__,
+      left_join: u in assoc(f, :users),
+      select: %{f | subscriber_count: count(u.id)},
+      group_by: f.id
   end
 end
