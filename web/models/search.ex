@@ -23,7 +23,7 @@ defmodule Reader.Search do
     "artistName" => author,
     "genreIds" => genre_ids,
     "feedUrl" => feed_url,
-    "artworkUrl100" => image_url
+    "artworkUrl600" => image_url
   }),
     do: %__MODULE__{
       title: title,

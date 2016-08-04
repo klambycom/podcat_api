@@ -6,7 +6,7 @@ defmodule Reader.FeedController do
   plug :scrub_params, "feed" when action in [:create]
 
   def index(conn, _params) do
-    feeds = Repo.all(Feed.summary)
+    feeds = conn |> feed_summary |> Repo.all
     render(conn, "index.json", feeds: feeds)
   end
 
@@ -28,7 +28,7 @@ defmodule Reader.FeedController do
   end
 
   def show(conn, %{"id" => id}) do
-    feed = Repo.get!(Feed.summary, id)
+    feed = Repo.get!(feed_summary(conn), id)
 
     users =
       User.subscribed_to(feed)
@@ -63,5 +63,15 @@ defmodule Reader.FeedController do
 
     conn
     |> send_resp(:no_content, "")
+  end
+
+  defp feed_summary(conn) do
+    user = Guardian.Plug.current_resource(conn)
+
+    if user do
+      Feed.summary(user)
+    else
+      Feed.summary
+    end
   end
 end

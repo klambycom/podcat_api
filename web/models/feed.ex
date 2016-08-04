@@ -14,6 +14,7 @@ defmodule Reader.Feed do
     field :image_url, :string
     field :feed_url, :string
     field :subscriber_count, :integer, virtual: true
+    field :subscribed_at, Ecto.DateTime, virtual: true, default: nil
 
     many_to_many :users, Reader.User, join_through: Reader.Subscription
 
@@ -29,6 +30,7 @@ defmodule Reader.Feed do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_fields, @optional_fields)
+    |> unique_constraint(:feed_url)
   end
 
   @doc """
@@ -53,5 +55,14 @@ defmodule Reader.Feed do
       left_join: u in assoc(f, :users),
       select: %{f | subscriber_count: count(u.id)},
       group_by: f.id
+  end
+
+  def summary(%Reader.User{id: user_id}) do
+    from f in __MODULE__,
+      left_join: u in assoc(f, :users),
+      left_join: s in Reader.Subscription,
+        on: s.user_id == ^user_id and s.feed_id == f.id,
+      select: %{f | subscriber_count: count(u.id), subscribed_at: s.inserted_at},
+      group_by: [f.id, s.inserted_at]
   end
 end

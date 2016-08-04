@@ -26,21 +26,24 @@ defmodule Reader.FeedView do
     users = Map.get(data, :users, [])
 
     %{
+      author: feed.author,
       summary: feed.summary,
       homepage: feed.homepage,
       description: feed.description,
       feed_url: feed.feed_url,
       users: render_many(users, UserView, "user.json", conn: conn),
+      nr_of_subscribers: feed.subscriber_count,
       meta: %{
         inserted_at: feed.inserted_at,
         updated_at: feed.updated_at,
-        nr_of_subscribers: feed.subscriber_count,
+        subscribed_at: feed.subscribed_at,
         users_count: length(users)
       },
       links: %{
         self: feed_url(conn, :show, feed),
         delete: feed_url(conn, :delete, feed),
-        related: "TODO: posts"
+        subscribe: feed_subscription_url(conn, :create, feed),
+        unsubscribe: feed_subscription_url(conn, :delete, feed)
       }
     }
   end
