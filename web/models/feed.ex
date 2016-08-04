@@ -7,10 +7,12 @@ defmodule Reader.Feed do
   @http_client Application.get_env(:reader, :http_client)
 
   schema "feeds" do
-    field :name, :string
+    field :summary, :string
+    field :author, :string
     field :homepage, :string
     field :description, :string
-    field :rss_feed, :string
+    field :image_url, :string
+    field :feed_url, :string
     field :subscriber_count, :integer, virtual: true
 
     many_to_many :users, Reader.User, join_through: Reader.Subscription
@@ -18,8 +20,8 @@ defmodule Reader.Feed do
     timestamps
   end
 
-  @required_fields ~w(name homepage description rss_feed)
-  @optional_fields ~w()
+  @required_fields ~w(summary feed_url)
+  @optional_fields ~w(author homepage description image_url)
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
@@ -40,7 +42,7 @@ defmodule Reader.Feed do
       |> Xml.from_string
       |> RSS2.parse
 
-    %{feed | rss_feed: url}
+    %{feed | feed_url: url}
   end
 
   @doc """

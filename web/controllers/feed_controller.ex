@@ -40,7 +40,7 @@ defmodule Reader.FeedController do
 
   def update(conn, %{"id" => id}) do
     feed = Repo.get!(Feed, id)
-    feed_params = Feed.download(feed.rss_feed)
+    feed_params = Feed.download(feed.feed_url)
     changeset = Feed.changeset(feed, feed_params)
 
     case Repo.update(changeset) do

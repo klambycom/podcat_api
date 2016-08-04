@@ -19,10 +19,10 @@ defmodule Reader.SubscriptionView do
 
   def render("subscription.json", %{subscription: subscription, conn: conn}),
     do: %{
-      title: subscription.feed.name,
+      summary: subscription.feed.summary,
       description: subscription.feed.description,
-      url: subscription.feed.homepage,
-      feed: subscription.feed.rss_feed,
+      homepage: subscription.feed.homepage,
+      feed_url: subscription.feed.feed_url,
       meta: %{
         subscribed_at: subscription.inserted_at,
         inserted_at: subscription.feed.inserted_at,

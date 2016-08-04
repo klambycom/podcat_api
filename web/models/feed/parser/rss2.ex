@@ -43,18 +43,18 @@ defmodule Reader.Feed.Parser.RSS2 do
       ...> )
       ...> |> Reader.Feed.Parser.RSS2.parse
       %{
-        name: "Klamby Blog",
+        title: "Klamby Blog",
         homepage: "https://klamby.com",
         description: "Klamby Awesome Blog",
-        rss_feed: nil
+        feed_url: nil
       }
   """
   def parse(document) do
     %{
-          name: document |> channel("./title") |> Xml.text,
+          summary: document |> channel("./title") |> Xml.text,
           homepage: document |> channel("./link") |> Xml.text,
           description: document |> channel("./description") |> Xml.text,
-          rss_feed: nil
+          feed_url: nil
         }
   end
 

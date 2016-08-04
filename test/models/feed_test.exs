@@ -3,7 +3,7 @@ defmodule Reader.FeedTest do
 
   alias Reader.Feed
 
-  @valid_attrs %{description: "some content", homepage: "some content", name: "some content", rss_feed: "some content"}
+  @valid_attrs %{description: "some content", homepage: "some content", summary: "some content", feed_url: "some content"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do
@@ -22,8 +22,8 @@ defmodule Reader.FeedTest do
     assert feed == %{
       description: "A blog.",
       homepage: "http://klamby.com",
-      name: "Test Blog",
-      rss_feed: "http://foobar.com/rss_feed.xml"
+      summary: "Test Blog",
+      feed_url: "http://foobar.com/rss_feed.xml"
     }
   end
 end
