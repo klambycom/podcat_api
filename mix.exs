@@ -54,7 +54,8 @@ defmodule Reader.Mixfile do
       {:httpoison, "~> 0.9.0"},
       {:comeonin, "~> 2.5"},
       {:guardian, "~> 0.12.0"},
-      {:poison, "~> 2.0"}
+      {:poison, "~> 2.0"},
+      {:mogrify, "~> 0.3.3"}
     ]
   end
 

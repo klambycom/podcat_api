@@ -33,6 +33,11 @@ defmodule Reader.FeedView do
       feed_url: feed.feed_url,
       users: render_many(users, UserView, "user.json", conn: conn),
       nr_of_subscribers: feed.subscriber_count,
+      images: %{
+        "50": feed_image_url(conn, :show, feed, size: 50),
+        "100": feed_image_url(conn, :show, feed, size: 100),
+        "600": feed_image_url(conn, :show, feed, size: 600)
+      },
       meta: %{
         inserted_at: feed.inserted_at,
         updated_at: feed.updated_at,

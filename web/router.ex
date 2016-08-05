@@ -19,6 +19,7 @@ defmodule Reader.Router do
     resources "/feeds", FeedController do
       post "/subscribe", SubscriptionController, :create
       delete "/unsubscribe", SubscriptionController, :delete
+      get "/image", ImageController, :show
     end
 
     resources "/users", Api.UserController, except: [:new, :edit] do
