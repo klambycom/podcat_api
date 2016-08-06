@@ -44,7 +44,7 @@ defmodule Reader.Feed.Parser.RSS2 do
       ...> |> Reader.Feed.Parser.RSS2.parse
       %{
         title: "Klamby Blog",
-        homepage: "https://klamby.com",
+        link: "https://klamby.com",
         description: "Klamby Awesome Blog",
         feed_url: nil
       }
@@ -52,7 +52,7 @@ defmodule Reader.Feed.Parser.RSS2 do
   def parse(document) do
     %{
           summary: document |> channel("./title") |> Xml.text,
-          homepage: document |> channel("./link") |> Xml.text,
+          link: document |> channel("./link") |> Xml.text,
           description: document |> channel("./description") |> Xml.text,
           feed_url: nil
         }

@@ -26,10 +26,15 @@ defmodule Reader.FeedView do
     users = Map.get(data, :users, [])
 
     %{
-      author: feed.author,
+      title: feed.title,
+      subtitle: feed.subtitle,
       summary: feed.summary,
-      homepage: feed.homepage,
       description: feed.description,
+      author: feed.author,
+      link: feed.link,
+      copyright: feed.copyright,
+      block: feed.block,
+      explicit: feed.explicit,
       feed_url: feed.feed_url,
       users: render_many(users, UserView, "user.json", conn: conn),
       nr_of_subscribers: feed.subscriber_count,

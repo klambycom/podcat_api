@@ -3,16 +3,23 @@ defmodule Reader.Feed do
 
   alias Reader.Xml
   alias Reader.Feed.Parser.RSS2
+  alias Reader.Feed.Explicit
 
   @http_client Application.get_env(:reader, :http_client)
 
   schema "feeds" do
+    field :title, :string
+    field :subtitle, :string
     field :summary, :string
     field :author, :string
-    field :homepage, :string
+    field :link, :string
     field :description, :string
+    field :copyright, :string
     field :image_url, :string
     field :feed_url, :string
+    field :block, :boolean, default: false
+    field :explicit, Explicit, default: :no
+
     field :subscriber_count, :integer, virtual: true
     field :subscribed_at, Ecto.DateTime, virtual: true, default: nil
 
@@ -22,7 +29,7 @@ defmodule Reader.Feed do
   end
 
   @required_fields ~w(summary feed_url)
-  @optional_fields ~w(author homepage description image_url)
+  @optional_fields ~w(author link description image_url)
 
   @doc """
   Builds a changeset based on the `struct` and `params`.

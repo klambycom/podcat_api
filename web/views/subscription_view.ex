@@ -21,7 +21,7 @@ defmodule Reader.SubscriptionView do
     do: %{
       summary: subscription.feed.summary,
       description: subscription.feed.description,
-      homepage: subscription.feed.homepage,
+      link: subscription.feed.link,
       feed_url: subscription.feed.feed_url,
       meta: %{
         subscribed_at: subscription.inserted_at,
