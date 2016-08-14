@@ -23,6 +23,63 @@ defmodule Reader.Xml do
   end
 
   @doc """
+  Check if a namespace exist.
+
+  ## Example
+
+      iex> Reader.Xml.from_string(
+      ...>   \"\"\"
+      ...>   <?xml version="1.0" encoding="UTF-8" ?>
+      ...>   <rss
+      ...>     xmlns:cc="http://web.resource.org/cc/"
+      ...>     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+      ...>     version="2.0"
+      ...>   >
+      ...>     <channel>
+      ...>       <title>Klamby Podcast</title>
+      ...>     </channel>
+      ...>   </rss>
+      ...>   \"\"\"
+      ...> )
+      ...> |> Reader.Xml.namespace?(:itunes)
+      true
+  """
+  def namespace?(xml_node, namespace),
+    do: xml_node |> namespaces |> Map.has_key?(namespace)
+
+  @doc """
+  Extract all namespaces from the document.
+
+  ## Example
+
+      iex> Reader.Xml.from_string(
+      ...>   \"\"\"
+      ...>   <?xml version="1.0" encoding="UTF-8" ?>
+      ...>   <rss
+      ...>     xmlns:cc="http://web.resource.org/cc/"
+      ...>     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+      ...>     version="2.0"
+      ...>   >
+      ...>     <channel>
+      ...>       <title>Klamby Podcast</title>
+      ...>     </channel>
+      ...>   </rss>
+      ...>   \"\"\"
+      ...> )
+      ...> |> Reader.Xml.namespaces
+      %{
+        cc: "http://web.resource.org/cc/",
+        itunes: "http://www.itunes.com/dtds/podcast-1.0.dtd"
+      }
+  """
+  def namespaces(xmlElement(namespace: xmlNamespace(nodes: namespaces))),
+    do: Enum.reduce(namespaces, %{}, fn({key, value}, acc) ->
+          Map.put(acc, List.to_atom(key), Atom.to_string(value))
+        end)
+
+  def namespaces(_), do: %{}
+
+  @doc """
   Extract the text from a XML-node.
 
   ## Example
@@ -50,6 +107,7 @@ defmodule Reader.Xml do
   """
   def text(xmlElement(content: content)), do: text(content, "")
   def text([xmlElement(content: content)]), do: text(content, "")
+  def text(_), do: nil
 
   defp text([], str), do: str
   defp text([xmlText(value: value) | rest], str),
@@ -74,7 +132,7 @@ defmodule Reader.Xml do
       ...> |> Reader.Xml.attr("version")
       "2.0"
   """
-  def attr([], _), do: ""
+  def attr([], _), do: nil
   def attr([xml_node], name), do: attr(xml_node, name)
 
   def attr(xml_node, name), do: xml_node |> xpath("./@#{name}") |> extract_attr

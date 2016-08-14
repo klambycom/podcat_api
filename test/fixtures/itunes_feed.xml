@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+	<channel>
+		<title>Klamby Podcast</title>
+		<itunes:subtitle>Klamby Podcast!</itunes:subtitle>
+		<itunes:summary>Klamby Awesome Podcast</itunes:summary>
+		<itunes:author>Christian Nilsson</itunes:author>
+		<description>Klamby Awesome Podcast</description>
+		<link>https://klamby.com</link>
+		<copyright>christian</copyright>
+		<itunes:image href="http://klamby.com/bild.jpg" />
+	</channel>
+</rss>

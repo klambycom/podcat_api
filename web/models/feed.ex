@@ -2,6 +2,7 @@ defmodule Reader.Feed do
   use Reader.Web, :model
 
   alias Reader.Xml
+  alias Reader.Xml.ItunesParser.Podcast
   alias Reader.Feed.Parser.RSS2
   alias Reader.Feed.Explicit
 
@@ -28,28 +29,57 @@ defmodule Reader.Feed do
     timestamps
   end
 
-  @required_fields ~w(summary feed_url)
-  @optional_fields ~w(author link description image_url)
+  @required_fields ~w(title author summary feed_url)
+  @optional_fields ~w(subtitle summary link description image_url copyright block explicit)
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, @required_fields, @optional_fields)
-    |> unique_constraint(:feed_url)
-  end
+  def changeset(struct, params \\ %{})
+
+  def changeset(struct, %Podcast{meta: meta, feed_url: feed_url}),
+    do: changeset(
+          struct,
+          %{
+            title: meta.title,
+            subtitle: meta.subtitle,
+            summary: meta.summary,
+            author: meta.author,
+            link: meta.link,
+            description: meta.description,
+            copyright: meta.copyright,
+            image_url: meta.image_url,
+            block: meta.block,
+            explicit: meta.explicit,
+            feed_url: feed_url
+          }
+        )
+
+  def changeset(struct, params),
+    do: struct
+        |> cast(params, @required_fields, @optional_fields)
+        |> unique_constraint(:feed_url)
 
   @doc """
   Download and parse feed from url.
   """
+  def download(%__MODULE__{feed_url: feed_url}), do: download(feed_url)
+
   def download(url) do
     {:ok, response} = @http_client.get(url)
 
-    feed =
+    xml =
       response.body
       |> Xml.from_string
-      |> RSS2.parse
+
+    feed =
+      if Xml.ItunesParser.valid?(xml) do
+        xml
+        |> Xml.ItunesParser.parse
+      else
+        xml
+        |> RSS2.parse
+      end
 
     %{feed | feed_url: url}
   end

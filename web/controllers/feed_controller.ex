@@ -38,20 +38,22 @@ defmodule Reader.FeedController do
     render(conn, "show.json", feed: feed, users: users)
   end
 
+  @doc """
+  Downlaod and update the feed in another process and return 202 Accepted
+  (the request has been accepted for processing) if the feed exists in the DB.
+
+  PUT /feeds/{feed_id}
+
+  ## Responses
+
+  202 Accepted
+  """
   def update(conn, %{"id" => id}) do
     feed = Repo.get!(Feed, id)
-    feed_params = Feed.download(feed.feed_url)
-    changeset = Feed.changeset(feed, feed_params)
+    spawn fn -> Feed.changeset(feed, Feed.download(feed)) |> Repo.update! end
 
-    case Repo.update(changeset) do
-      {:ok, feed} ->
-        conn
-        |> render("show.json", feed: feed)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Reader.ChangesetView, "error.json", changeset: changeset)
-    end
+    conn
+    |> send_resp(:accepted, "")
   end
 
   def delete(conn, %{"id" => id}) do
