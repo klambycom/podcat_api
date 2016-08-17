@@ -1,10 +1,11 @@
 defmodule Reader.Feed do
   use Reader.Web, :model
 
+  alias Reader.{User, Subscription}
   alias Reader.Xml
   alias Reader.Xml.ItunesParser.Podcast
   alias Reader.Feed.Parser.RSS2
-  alias Reader.Feed.Explicit
+  alias Reader.Feed.{Explicit, Item}
 
   @http_client Application.get_env(:reader, :http_client)
 
@@ -24,7 +25,9 @@ defmodule Reader.Feed do
     field :subscriber_count, :integer, virtual: true
     field :subscribed_at, Ecto.DateTime, virtual: true, default: nil
 
-    many_to_many :users, Reader.User, join_through: Reader.Subscription
+    many_to_many :users, User, join_through: Subscription
+
+    has_many :items, Item
 
     timestamps
   end
@@ -58,6 +61,7 @@ defmodule Reader.Feed do
   def changeset(struct, params),
     do: struct
         |> cast(params, @required_fields, @optional_fields)
+        |> cast_assoc(:items)
         |> unique_constraint(:feed_url)
 
   @doc """
@@ -94,10 +98,10 @@ defmodule Reader.Feed do
       group_by: f.id
   end
 
-  def summary(%Reader.User{id: user_id}) do
+  def summary(%User{id: user_id}) do
     from f in __MODULE__,
       left_join: u in assoc(f, :users),
-      left_join: s in Reader.Subscription,
+      left_join: s in Subscription,
         on: s.user_id == ^user_id and s.feed_id == f.id,
       select: %{f | subscriber_count: count(u.id), subscribed_at: s.inserted_at},
       group_by: [f.id, s.inserted_at]
