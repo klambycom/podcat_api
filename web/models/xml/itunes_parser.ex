@@ -6,6 +6,13 @@ defmodule Reader.Xml.ItunesParser do
   end
 
   defmodule Meta do
+    @modeledoc """
+    Meta contains information about the podcast.
+
+    Summary is the value of <itunes:summary>, or <description> if summary is
+    missing.
+    """
+
     defstruct title: nil,
               subtitle: nil,
               summary: nil,
@@ -16,14 +23,87 @@ defmodule Reader.Xml.ItunesParser do
               image_url: nil,
               block: false,
               explicit: nil
+
+    @doc """
+    Parse data about the podcast.
+    """
+    def parse(document),
+      do: %__MODULE__{
+            title: document |> Xml.xpath("./title") |> Xml.text,
+            subtitle: document |> Xml.xpath("./itunes:subtitle") |> Xml.text,
+            summary: Xml.ItunesParser.one_of([
+              document |> Xml.xpath("./itunes:summary") |> Xml.text,
+              document |> Xml.xpath("./description") |> Xml.text
+            ]),
+            author: document |> Xml.xpath("./itunes:author") |> Xml.text,
+            link: document |> Xml.xpath("./link") |> Xml.text,
+            description: document |> Xml.xpath("./description") |> Xml.text,
+            copyright: document |> Xml.xpath("./copyright") |> Xml.text,
+            image_url: document |> Xml.xpath("./itunes:image") |> Xml.attr("href"),
+            block: document |> Xml.ItunesParser.is_blocked,
+            explicit: document |> Xml.xpath("./itunes:explicit") |> Xml.text
+          }
   end
 
   defmodule Item do
-    defstruct guid: nil # Link if guid is missing, I tink.
+    @modeledoc """
+    Item is the episodes from the podcast.
+    """
+
+    defstruct guid: nil,
+              title: nil,
+              subtitle: nil,
+              summary: nil,
+              author: nil,
+              duration: nil,
+              published_at: nil,
+              image_url: nil,
+              explicit: nil,
+              block: false,
+              enclosure: nil
+
+    @doc """
+    Parse a item in the feed.
+    """
+    def parse(document),
+      do: %__MODULE__{
+            guid: Xml.ItunesParser.one_of([
+              document |> Xml.xpath("./guid") |> Xml.text,
+              document |> Xml.xpath("./link") |> Xml.text
+            ]),
+            title: document |> Xml.xpath("./title") |> Xml.text,
+            published_at: document |> Xml.xpath("./pubDate") |> Xml.text,
+            author: document |> Xml.xpath("./itunes:author") |> Xml.text,
+            duration: document |> Xml.xpath("./itunes:duration") |> Xml.text,
+            subtitle: document |> Xml.xpath("./itunes:subtitle") |> Xml.text,
+            summary: Xml.ItunesParser.one_of([
+              document |> Xml.xpath("./itunes:summary") |> Xml.text,
+              document |> Xml.xpath("./description") |> Xml.text
+            ]),
+            image_url: document |> Xml.xpath("./itunes:image") |> Xml.attr("href"),
+            block: document |> Xml.ItunesParser.is_blocked,
+            explicit: document |> Xml.xpath("./itunes:explicit") |> Xml.text,
+            enclosure: Xml.ItunesParser.Enclosure.parse(document)
+          }
   end
 
   defmodule Enclosure do
-    defstruct url: nil, duration: 0, type: nil
+    @modeledoc """
+    Audio for the episode/item. The enclosure contains the attached multimedia
+    to the item by providing the URL of the file and not the actual file.
+    """
+
+    defstruct url: nil, size: 0, type: nil
+
+    @doc """
+    The enclosure contains the url, size in bytes and the mime type.
+    """
+    def parse(document),
+      do: %__MODULE__{
+            url: document |> Xml.xpath("./enclosure") |> Xml.attr("url"),
+            size: document |> Xml.xpath("./enclosure") |> Xml.attr("length"),
+            type: document |> Xml.xpath("./enclosure") |> Xml.attr("type")
+          }
   end
 
   @doc """
@@ -63,39 +143,24 @@ defmodule Reader.Xml.ItunesParser do
   """
   def parse(document),
     do: %__MODULE__.Podcast{
-          meta: meta(document)
+          meta: document |> Xml.xpath("/rss/channel") |> Meta.parse,
+          items: document |> Xml.xpath("/rss/channel/item") |> Enum.map(&Item.parse/1)
         }
 
   @doc """
-  Parse data about the podcast.
+  Check if document (feed or item) is blocked and should not be visible.
   """
-  def meta(document),
-    do: %__MODULE__.Meta{
-          title: document |> channel("./title") |> Xml.text,
-          subtitle: document |> channel("./itunes:subtitle") |> Xml.text,
-          summary: document |> channel("./itunes:summary") |> Xml.text,
-          author: document |> channel("./itunes:author") |> Xml.text,
-          link: document |> channel("./link") |> Xml.text,
-          description: document |> channel("./description") |> Xml.text,
-          copyright: document |> channel("./copyright") |> Xml.text,
-          image_url: document |> channel("./itunes:image") |> Xml.attr("href"),
-          block: document |> channel("./itunes:block") |> Xml.text |> is_blocked,
-          explicit: document |> channel("./itunes:explicit") |> Xml.text
-        }
-        |> update_summary
-  #field :explicit, Explicit, default: :no
+  def is_blocked(document) do
+    value = document
+            |> Xml.xpath("./itunes:block")
+            |> Xml.text
 
-  # If <itunes:summary> is not included, the contents of the <description> tag are used.
-  # http://lists.apple.com/archives/syndication-dev/2005/Nov/msg00002.html#_Toc526931691
-  defp update_summary(meta) do
-    if is_nil(meta.summary) do
-      %{meta | summary: meta.description}
-    else
-      meta
-    end
+    is_binary(value) && String.downcase(value) == "yes"
   end
 
-  defp is_blocked(str), do: is_binary(str) && String.downcase(str) == "yes"
-
-  defp channel(document, path), do: document |> Xml.xpath("/rss/channel") |> Xml.xpath(path)
+  @doc """
+  Get first value that is not nil.
+  """
+  def one_of(values),
+    do: Enum.find(values, nil, fn(value) -> not is_nil(value) end)
 end
