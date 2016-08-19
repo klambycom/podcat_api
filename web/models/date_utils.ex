@@ -3,21 +3,6 @@ defmodule Reader.DateUtils do
   Utils for working with date and time.
   """
 
-  @doc false
-  defstruct str: [],
-            datetime: %DateTime{
-              year: 1900,
-              month: 1,
-              day: 1,
-              hour: 0,
-              minute: 0,
-              second: 0,
-              time_zone: "Etc/UTC",
-              zone_abbr: "UTC",
-              utc_offset: 0,
-              std_offset: 0
-            }
-
   defmodule RFC2822 do
     @modeledoc """
     RFC822/2822
@@ -44,6 +29,9 @@ defmodule Reader.DateUtils do
 
     import String, only: [to_integer: 1]
 
+    @datetime %DateTime{year: 1900, month: 1, day: 1, hour: 0, minute: 0, second: 0,
+                        time_zone: "Etc/UTC", zone_abbr: "UTC", utc_offset: 0, std_offset: 0}
+
     @doc """
     Parse the date-format (RFC822/2822) used in RSS and create a `DateTime.t`.
 
@@ -56,132 +44,75 @@ defmodule Reader.DateUtils do
                   time_zone: "Etc/UTC", zone_abbr: "UTC"}
     """
     def parse(date),
-      do: %DateUtils{str: String.split(date)}
-          |> weekday
-          |> day
-          |> month
-          |> year
-          |> time
-          |> time_zone
-          |> fn (%DateUtils{datetime: datetime}) -> datetime end.()
+      do: {String.split(date), @datetime}
+          |> weekday |> day |> month |> year |> time |> time_zone |> elem(1)
+
+    defp set({[_ | rest], dt}, nil), do: {rest, dt}
+    defp set({[_ | rest], dt}, values), do: {rest, Map.merge(dt, values)}
 
     # Weekday: Mon, Tue, etc. and "," (optional)
-    defp weekday(%DateUtils{str: [<<_::bytes-size(3)>> <> "," | rest], datetime: _} = date),
-      do: %{date | str: rest}
-
+    defp weekday({[<<_::bytes-size(3)>> <> "," | _], _dt} = date), do: date |> set(nil)
     defp weekday(date), do: date
 
     # Days: d or dd
-    defp day(%DateUtils{str: [<<d::bytes-size(1)>> | rest], datetime: datetime} = date),
-      do: %{date | str: rest, datetime: %{datetime | day: to_integer(d)}}
-
-    defp day(%DateUtils{str: [<<dd::bytes-size(2)>> | rest], datetime: datetime} = date),
-      do: %{date | str: rest, datetime: %{datetime | day: to_integer(dd)}}
+    defp day({[<<d::bytes-size(1)>> | _], _dt} = date), do: date |> set(%{day: to_integer(d)})
+    defp day({[<<dd::bytes-size(2)>> | _], _dt} = date), do: date |> set(%{day: to_integer(dd)})
 
     # Month: Jan, Feb, etc.
-    defp month(%DateUtils{str: [<<month::bytes-size(3)>> | rest], datetime: datetime} = date),
-      do: %{date | str: rest, datetime: %{datetime | month: DateUtils.month_to_integer(month)}}
+    defp month({[<<month::bytes-size(3)>> | _], _dt} = date),
+      do: date |> set(%{month: DateUtils.month_to_integer(month)})
 
     # Year: yy (RFC822) or yyyy (RFC2822)
-    defp year(%DateUtils{str: [<<yy::bytes-size(2)>> | rest], datetime: datetime} = date),
-      do: %{date | str: rest, datetime: %{datetime | year: to_integer("19#{yy}")}}
+    defp year({[<<yy::bytes-size(2)>> | _], _dt} = date),
+      do: date |> set(%{year: to_integer("19#{yy}")})
 
-    defp year(%DateUtils{str: [<<yyyy::bytes-size(4)>> | rest], datetime: datetime} = date),
-      do: %{date | str: rest, datetime: %{datetime | year: to_integer(yyyy)}}
+    defp year({[<<yyyy::bytes-size(4)>> | _], _dt} = date),
+      do: date |> set(%{year: to_integer(yyyy)})
 
     # Time: hh:mm:ss or hh:mm
     defp time(
-      %DateUtils{
-        str: [
-          <<hh::bytes-size(2)>> <> ":" <>
-          <<mm::bytes-size(2)>> <> ":" <>
-          <<ss::bytes-size(2)>> | rest
-        ],
-        datetime: datetime
-      } = date
+      {[<<hh::bytes-size(2)>> <> ":" <>
+        <<mm::bytes-size(2)>> <> ":" <>
+        <<ss::bytes-size(2)>> | _], _dt} = date
     ),
-      do: %{
-            date |
-            str: rest,
-            datetime: %{
-              datetime | hour: to_integer(hh), minute: to_integer(mm), second: to_integer(ss)
-            }
-          }
+      do: date |> set(%{hour: to_integer(hh), minute: to_integer(mm), second: to_integer(ss)})
 
-    defp time(
-      %DateUtils{
-        str: [<<hh::bytes-size(2)>> <> ":" <> <<mm::bytes-size(2)>> | rest],
-        datetime: datetime
-      } = date
-    ),
-      do: %{
-            date |
-            str: rest,
-            datetime: %{datetime | hour: to_integer(hh), minute: to_integer(mm)}
-          }
+    defp time({[<<hh::bytes-size(2)>> <> ":" <> <<mm::bytes-size(2)>> | _], _dt} = date),
+      do: date |> set(%{hour: to_integer(hh), minute: to_integer(mm)})
 
     # Time zone: +hhmm, -hhmm, hhmm, A-Z or GMT, EST, EDT, etc.
-    defp time_zone(
-      %DateUtils{
-        str: ["+" <> <<hh::bytes-size(2)>> <> <<mm::bytes-size(2)>> | rest],
-        datetime: datetime
-      } = date
-    ),
-      do: %{
-            date |
-            str: rest,
-            datetime: add_time_zone(datetime, :-, to_integer(hh), to_integer(mm))
-          }
+    defp time_zone({["+" <> <<hh::bytes-size(2)>> <> <<mm::bytes-size(2)>> | _], _dt} = date),
+      do: date |> set(add_time_zone(:-, to_integer(hh), to_integer(mm)))
 
-    defp time_zone(
-      %DateUtils{
-        str: ["-" <> <<hh::bytes-size(2)>> <> <<mm::bytes-size(2)>> | rest],
-        datetime: datetime
-      } = date
-    ),
-      do: %{
-            date |
-            str: rest,
-            datetime: add_time_zone(datetime, :+, to_integer(hh), to_integer(mm))
-          }
+    defp time_zone({["-" <> <<hh::bytes-size(2)>> <> <<mm::bytes-size(2)>> | _], _dt} = date),
+      do: date |> set(add_time_zone(:+, to_integer(hh), to_integer(mm)))
 
-    defp time_zone(
-      %DateUtils{
-        str: [<<hh::bytes-size(2)>> <> <<mm::bytes-size(2)>> | rest],
-        datetime: datetime
-      } = date
-    ),
-      do: %{
-            date |
-            str: rest,
-            datetime: add_time_zone(datetime, :-, to_integer(hh), to_integer(mm))
-          }
+    defp time_zone({[<<hh::bytes-size(2)>> <> <<mm::bytes-size(2)>> | _], _dt} = date),
+      do: date |> set(add_time_zone(:-, to_integer(hh), to_integer(mm)))
 
-    defp time_zone(%DateUtils{str: [<<time_zone::bytes-size(3)>> | rest], datetime: _} = date),
-      do: time_zone(%{date | str: [DateUtils.time_zone(time_zone), rest]})
+    defp time_zone({[<<time_zone::bytes-size(3)>> | rest], dt}),
+      do: time_zone({[DateUtils.time_zone(time_zone), rest], dt})
 
-    defp time_zone(%DateUtils{str: [<<time_zone::bytes-size(2)>> | rest], datetime: _} = date),
-      do: time_zone(%{date | str: [DateUtils.time_zone(time_zone), rest]})
+    defp time_zone({[<<time_zone::bytes-size(2)>> | rest], dt}),
+      do: time_zone({[DateUtils.time_zone(time_zone), rest], dt})
 
-    defp time_zone(%DateUtils{str: [<<time_zone::bytes-size(1)>> | rest], datetime: _} = date),
-      do: time_zone(%{date | str: [DateUtils.time_zone(time_zone), rest]})
+    defp time_zone({[<<time_zone::bytes-size(1)>> | rest], dt}),
+      do: time_zone({[DateUtils.time_zone(time_zone), rest], dt})
 
     defp time_zone(date), do: date
 
-    defp add_time_zone(datetime, sym, 0, min),
-      do: %{datetime | time_zone: "Etc/UTC", zone_abbr: "UTC", utc_offset: seconds(sym, 0, min)}
+    defp add_time_zone(sym, 0, min),
+      do: %{time_zone: "Etc/UTC", zone_abbr: "UTC", utc_offset: seconds(sym, 0, min)}
 
-    defp add_time_zone(datetime, :+, hour, minute),
+    defp add_time_zone(:+, hour, minute),
       do: %{
-            datetime |
             time_zone: "Etc/GMT+#{hour}",
             zone_abbr: "GMT+#{hour}",
             utc_offset: seconds(:-, hour, minute)
           }
 
-    defp add_time_zone(datetime, :-, hour, minute),
+    defp add_time_zone(:-, hour, minute),
       do: %{
-            datetime |
             time_zone: "Etc/GMT-#{hour}",
             zone_abbr: "GMT-#{hour}",
             utc_offset: seconds(:+, hour, minute)
