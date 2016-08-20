@@ -29,7 +29,9 @@ defmodule Reader.Mixfile do
         :phoenix_ecto,
         :postgrex,
         :httpoison,
-        :comeonin
+        :comeonin,
+        :timex,
+        :timex_ecto
       ]
     ]
   end
@@ -55,7 +57,9 @@ defmodule Reader.Mixfile do
       {:comeonin, "~> 2.5"},
       {:guardian, "~> 0.12.0"},
       {:poison, "~> 2.0"},
-      {:mogrify, "~> 0.3.3"}
+      {:mogrify, "~> 0.3.3"},
+      {:timex, "~> 3.0"},
+      {:timex_ecto, "~> 3.0"}
     ]
   end
 
