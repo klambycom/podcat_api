@@ -1,4 +1,4 @@
-defmodule Reader.Api.SessionView do
+defmodule Reader.SessionView do
   use Reader.Web, :view
 
   def render("login.json", %{user: user, jwt: jwt, exp: exp}),

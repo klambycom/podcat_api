@@ -1,4 +1,4 @@
-defmodule Reader.Api.UserController do
+defmodule Reader.UserController do
   use Reader.Web, :controller
 
   alias Reader.User

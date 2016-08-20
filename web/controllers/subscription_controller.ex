@@ -2,9 +2,10 @@ defmodule Reader.SubscriptionController do
   use Reader.Web, :controller
 
   alias Reader.{User, Subscription}
+  alias Reader.SessionController
 
   plug Guardian.Plug.EnsureAuthenticated,
-    [handler: Reader.Api.SessionController] when action in [:create, :delete]
+    [handler: SessionController] when action in [:create, :delete]
 
   @doc """
   Get all subscriptions belonging to the user.

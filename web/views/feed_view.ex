@@ -1,8 +1,7 @@
 defmodule Reader.FeedView do
   use Reader.Web, :view
 
-  alias Reader.Api.UserView
-  alias Reader.ItemView
+  alias Reader.{UserView, ItemView}
 
   def render("index.json", %{feeds: feeds, conn: conn}),
     do: %{

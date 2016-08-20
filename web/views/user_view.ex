@@ -1,9 +1,9 @@
-defmodule Reader.Api.UserView do
+defmodule Reader.UserView do
   use Reader.Web, :view
 
   def render("index.json", %{users: users, conn: conn}),
     do: %{
-      data: render_many(users, Reader.Api.UserView, "user.json", conn: conn),
+      data: render_many(users, __MODULE__, "user.json", conn: conn),
       links: %{
         self: user_url(conn, :index)
       },
@@ -13,14 +13,13 @@ defmodule Reader.Api.UserView do
     }
 
   def render("show.json", %{user: user, conn: conn}),
-    do: %{data: render_one(user, Reader.Api.UserView, "user.json", conn: nil)}
+    do: %{data: render_one(user, __MODULE__, "user.json", conn: nil)}
         |> add_links(user, conn)
 
   def render("user.json", %{user: user, conn: conn}) do
     data = %{
       id: user.id,
-      name: user.name,
-      email: user.email
+      name: user.name
     }
 
     if conn do
