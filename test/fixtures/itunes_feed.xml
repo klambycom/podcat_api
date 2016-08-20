@@ -9,5 +9,26 @@
 		<link>https://klamby.com</link>
 		<copyright>christian</copyright>
 		<itunes:image href="http://klamby.com/bild.jpg" />
+		<item>
+			<guid>85fe04ad626e616030eba0c131b95bdb</guid>
+			<title>Klamby 167 - You're part of the sample</title>
+			<pubDate>Tue, 02 Aug 2016 03:39:05 +0000</pubDate>
+			<itunes:author>Me</itunes:author>
+			<itunes:duration>32:37</itunes:duration>
+			<itunes:subtitle>Subtitle</itunes:subtitle>
+			<itunes:summary>Summary</itunes:summary>
+			<enclosure length="16341802" type="audio/mpeg" url="http://klamby.com/167.mp3" />
+			<link>http://klamby.com/167</link>
+		</item>
+		<item>
+			<title>Klamby 166 - On the periphery of the monolith</title>
+			<pubDate>Sat, 23 Jul 2016 12:23:20 +0000</pubDate>
+			<itunes:author>Me</itunes:author>
+			<itunes:duration>32:32</itunes:duration>
+			<itunes:subtitle>Subtitle</itunes:subtitle>
+			<description>Description</description>
+			<enclosure length="16341802" type="audio/mpeg" url="http://klamby.com/166.mp3" />
+			<link>http://klamby.com/166</link>
+		</item>
 	</channel>
 </rss>

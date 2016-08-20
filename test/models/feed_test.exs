@@ -70,7 +70,42 @@ defmodule Reader.FeedTest do
             image_url: "http://klamby.com/bild.jpg",
             block: false
           },
-          items: [],
+          items: [
+            %Reader.Xml.ItunesParser.Item{
+              guid: "85fe04ad626e616030eba0c131b95bdb",
+              title: "Klamby 167 - You're part of the sample",
+              subtitle: "Subtitle",
+              summary: "Summary",
+              author: "Me",
+              duration: "32:37",
+              published_at: Reader.DateUtils.RFC2822.parse("Tue, 02 Aug 2016 03:39:05 +0000"),
+              image_url: nil,
+              explicit: nil,
+              block: false,
+              enclosure: %Reader.Xml.ItunesParser.Enclosure{
+                url: "http://klamby.com/167.mp3",
+                size: "16341802",
+                type: "audio/mpeg"
+              }
+            },
+            %Reader.Xml.ItunesParser.Item{
+              guid: "http://klamby.com/166",
+              title: "Klamby 166 - On the periphery of the monolith",
+              subtitle: "Subtitle",
+              summary: "Description",
+              author: "Me",
+              duration: "32:32",
+              published_at: Reader.DateUtils.RFC2822.parse("Sat, 23 Jul 2016 12:23:20 +0000"),
+              image_url: nil,
+              explicit: nil,
+              block: false,
+              enclosure: %Reader.Xml.ItunesParser.Enclosure{
+                url: "http://klamby.com/166.mp3",
+                size: "16341802",
+                type: "audio/mpeg"
+              }
+            }
+          ],
           feed_url: "http://foobar.com/itunes_feed.xml"
         }
 end

@@ -72,7 +72,7 @@ defmodule Reader.Xml.ItunesParser do
               document |> Xml.xpath("./link") |> Xml.text
             ]),
             title: document |> Xml.xpath("./title") |> Xml.text,
-            published_at: document |> Xml.xpath("./pubDate") |> Xml.text,
+            published_at: rss_date(document |> Xml.xpath("./pubDate") |> Xml.text),
             author: document |> Xml.xpath("./itunes:author") |> Xml.text,
             duration: document |> Xml.xpath("./itunes:duration") |> Xml.text,
             subtitle: document |> Xml.xpath("./itunes:subtitle") |> Xml.text,
@@ -85,6 +85,9 @@ defmodule Reader.Xml.ItunesParser do
             explicit: document |> Xml.xpath("./itunes:explicit") |> Xml.text,
             enclosure: Xml.ItunesParser.Enclosure.parse(document)
           }
+
+    defp rss_date(nil), do: nil
+    defp rss_date(date), do: Reader.DateUtils.RFC2822.parse(date)
   end
 
   defmodule Enclosure do

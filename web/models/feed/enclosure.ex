@@ -12,6 +12,8 @@ defmodule Reader.Feed.Enclosure do
 
   use Reader.Web, :model
 
+  alias Reader.Xml.ItunesParser
+
   embedded_schema do
     field :url, :string
     field :length, :integer
@@ -24,7 +26,12 @@ defmodule Reader.Feed.Enclosure do
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def changeset(struct, params \\ %{}),
+  def changeset(struct, params \\ %{})
+
+  def changeset(struct, %ItunesParser.Enclosure{url: url, size: size, type: type}),
+    do: changeset(struct, %{url: url, length: size, type: type})
+
+  def changeset(struct, params),
     do: struct
         |> cast(params, @required_fields, @optional_fields)
 end

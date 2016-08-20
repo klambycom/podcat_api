@@ -48,6 +48,7 @@ defmodule Reader.Feed.Duration do
 
   @doc false
   def dump({hours, minutes, seconds}), do: {:ok, calculate(hours, minutes, seconds)}
+  def dump(seconds) when is_integer(seconds), do: {:ok, seconds} # Should not need this?
 
   defp calculate(hours, minutes, seconds), do: (hours * 60 + minutes) * 60 + seconds
 end

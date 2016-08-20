@@ -61,7 +61,6 @@ defmodule Reader.Feed do
   def changeset(struct, params),
     do: struct
         |> cast(params, @required_fields, @optional_fields)
-        |> cast_assoc(:items)
         |> unique_constraint(:feed_url)
 
   @doc """

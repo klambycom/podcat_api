@@ -50,7 +50,7 @@ defmodule Reader.FeedController do
   """
   def update(conn, %{"id" => id}) do
     feed = Repo.get!(Feed, id)
-    spawn fn -> Feed.changeset(feed, Feed.download(feed)) |> Repo.update! end
+    spawn fn -> update_feed(feed) end
 
     conn
     |> send_resp(:accepted, "")
@@ -74,6 +74,25 @@ defmodule Reader.FeedController do
       Feed.summary(user)
     else
       Feed.summary
+    end
+  end
+
+  defp update_feed(feed) do
+    data = Feed.download(feed)
+    Feed.changeset(feed, data) |> Repo.update!
+
+    data.items
+    |> Stream.map(&insert_item(feed.id, &1))
+    |> Enum.filter(&(&1)) # New items (TODO update playlists)
+  end
+
+  defp insert_item(feed_id, item) do
+    case Repo.get_by(Feed.Item, feed_id: feed_id, guid: item.guid) do
+      nil ->
+        Feed.Item.changeset_with_feed(feed_id, item) |> Repo.insert!
+      old_item ->
+        Feed.Item.changeset(old_item, item) |> Repo.update!
+        false
     end
   end
 end
