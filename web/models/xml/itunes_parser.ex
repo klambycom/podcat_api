@@ -1,4 +1,6 @@
 defmodule Reader.Xml.ItunesParser do
+  @behaviour Reader.Parser
+
   alias Reader.Xml
 
   defmodule Podcast do
