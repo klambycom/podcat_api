@@ -1,7 +1,7 @@
 defmodule Reader.SessionView do
   use Reader.Web, :view
 
-  def render("login.json", %{user: user, jwt: jwt, exp: exp}),
+  def render("login.json", %{user: _user, jwt: jwt, exp: exp}),
     do: %{
       jwt: jwt,
       exp: exp

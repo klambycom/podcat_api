@@ -1,5 +1,5 @@
 defmodule Reader.User.Auth do
-  @doc """
+  @modeledoc """
   Authenticate the user with password.
   """
 
