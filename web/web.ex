@@ -53,6 +53,7 @@ defmodule Reader.Web do
       import Reader.Router.Helpers
       import Reader.ErrorHelpers
       import Reader.Gettext
+      import Reader.ViewHelpers
     end
   end
 

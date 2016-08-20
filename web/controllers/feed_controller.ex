@@ -28,7 +28,7 @@ defmodule Reader.FeedController do
   end
 
   def show(conn, %{"id" => id}) do
-    feed = Repo.get!(feed_summary(conn), id)
+    feed = Repo.get!(feed_summary(conn), id) |> Repo.preload(:items)
 
     users =
       User.subscribed_to(feed)
