@@ -27,8 +27,10 @@ defmodule Reader.FeedController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    feed = Repo.get!(feed_summary(conn), id) |> Repo.preload(:items)
+  def show(conn, %{"id" => id, "item_limit" => item_limit, "item_offset" => item_offset}) do
+    feed =
+      Repo.get!(feed_summary(conn), id)
+      |> Repo.preload(items: Feed.Item.latest(item_limit, item_offset))
 
     users =
       User.subscribed_to(feed)
@@ -36,6 +38,14 @@ defmodule Reader.FeedController do
       |> Repo.all
 
     render(conn, "show.json", feed: feed, users: users)
+  end
+
+  def show(conn, params) do
+    params =
+      Map.put_new(params, "item_limit", 20)
+      |> Map.put_new("item_offset", 0)
+
+    show(conn, params)
   end
 
   @doc """

@@ -112,4 +112,13 @@ defmodule Reader.Feed.Item do
             enclosure: item.enclosure
           }
         )
+
+  @doc """
+  Get items sorted by published at.
+  """
+  def latest(limit, offset \\ 0),
+    do: from i in __MODULE__,
+          order_by: [desc: :published_at],
+          limit: ^limit,
+          offset: ^offset
 end
