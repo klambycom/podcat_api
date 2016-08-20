@@ -5,6 +5,7 @@ defmodule Reader.Feed do
   alias Reader.Xml
   alias Reader.Xml.ItunesParser.Podcast
   alias Reader.Feed.{Explicit, Item}
+  alias Reader.Parser
 
   @http_client Application.get_env(:reader, :http_client)
 
@@ -74,16 +75,10 @@ defmodule Reader.Feed do
       response.body
       |> Xml.from_string
 
-    feed =
-      if Xml.ItunesParser.valid?(xml) do
-        xml
-        |> Xml.ItunesParser.parse
-      else
-        xml
-        |> Xml.RSS2Parser.parse
-      end
-
-    %{feed | feed_url: url}
+    case Parser.parse(xml) do
+      {:ok, feed} -> %{feed | feed_url: url}
+      :error -> nil
+    end
   end
 
   @doc """

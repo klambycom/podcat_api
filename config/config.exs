@@ -25,6 +25,10 @@ config :logger, :console,
 # Configure HTTP client
 config :reader, :http_client, HTTPoison
 
+# Configure parsers
+config :reader, :parsers, [Reader.Xml.ItunesParser,
+                           Reader.Xml.RSS2Parser]
+
 # Configure Guardian
 config :guardian, Guardian,
   issuer: "Reader",
