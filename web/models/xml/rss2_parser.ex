@@ -1,4 +1,6 @@
-defmodule Reader.Feed.Parser.RSS2 do
+defmodule Reader.Xml.RSS2Parser do
+  @behaviour Reader.Parser
+
   alias Reader.Xml
 
   @doc """
@@ -7,7 +9,7 @@ defmodule Reader.Feed.Parser.RSS2 do
   ## Example
 
       iex> Reader.Xml.from_string("<channel><title>Klamby Blog</title></channel>")
-      ...> |> Reader.Feed.Parser.RSS2.valid?
+      ...> |> Reader.Xml.RSS2Parser.valid?
       false
 
       iex> Reader.Xml.from_string(
@@ -18,7 +20,7 @@ defmodule Reader.Feed.Parser.RSS2 do
       ...>   </rss>
       ...>   \"\"\"
       ...> )
-      ...> |> Reader.Feed.Parser.RSS2.valid?
+      ...> |> Reader.Xml.RSS2Parser.valid?
       true
   """
   def valid?(document),
@@ -41,9 +43,9 @@ defmodule Reader.Feed.Parser.RSS2 do
       ...>   </rss>
       ...>   \"\"\"
       ...> )
-      ...> |> Reader.Feed.Parser.RSS2.parse
+      ...> |> Reader.Xml.RSS2Parser.parse
       %{
-        title: "Klamby Blog",
+        summary: "Klamby Blog",
         link: "https://klamby.com",
         description: "Klamby Awesome Blog",
         feed_url: nil
