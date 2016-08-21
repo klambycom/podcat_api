@@ -13,8 +13,8 @@ defmodule Reader.Router do
   scope "/api", Reader do
     pipe_through [:api, :api_auth]
 
-    post "/login", Api.SessionController, :create, as: :login
-    delete "/logout", Api.SessionController, :delete, as: :logout
+    post "/login", SessionController, :create, as: :login
+    delete "/logout", SessionController, :delete, as: :logout
 
     resources "/feeds", FeedController do
       post "/subscribe", SubscriptionController, :create
@@ -22,7 +22,7 @@ defmodule Reader.Router do
       get "/image", ImageController, :show
     end
 
-    resources "/users", Api.UserController, except: [:new, :edit] do
+    resources "/users", UserController, except: [:new, :edit] do
       resources "/subscriptions", SubscriptionController, only: [:index]
     end
 
