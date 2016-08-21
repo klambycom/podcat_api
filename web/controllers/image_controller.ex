@@ -3,8 +3,28 @@ defmodule Reader.ImageController do
 
   alias Reader.Feed
 
-  @max_age 31 * 24 * 60 * 60
+  @max_age 31 * 24 * 60 * 60 # One month
 
+  @doc """
+  Proxy for fetching images.
+
+  GET /feeds/{feed_id}/image
+
+  ## TODO
+
+  - [ ] Cache original image (and maybe resized images) until the feed is
+        updated. Or check if the image is updated each time. Or check if the
+        image is updated each time the feed is updated.
+
+  ## Params
+
+  - `size`, size of the image.
+
+  ## Responses
+
+  - 200 OK
+  - 404 Not Found
+  """
   def show(conn, %{"feed_id" => feed_id, "size" => size}) do
     feed = Repo.get(Feed, feed_id)
 

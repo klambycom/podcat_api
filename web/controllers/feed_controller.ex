@@ -5,11 +5,45 @@ defmodule Reader.FeedController do
 
   plug :scrub_params, "feed" when action in [:create]
 
+  @doc """
+  Show all feeds (but not items).
+
+  GET /feeds
+
+  ## TODO
+
+  - [ ] Filter categories
+  - [ ] Limit and offset
+
+  ## Responses
+
+  - 200 OK
+  """
   def index(conn, _params) do
     feeds = conn |> feed_summary |> Repo.all
     render(conn, "index.json", feeds: feeds)
   end
 
+  @doc """
+  Create a new feed from a url.
+
+  POST /feeds
+
+  ## TODO
+
+  - Remove?
+
+  ## Data
+
+  Content-Type: application/json
+
+  - `feed`, url to the feed.
+
+  ## Responses
+
+  - 201 Created
+  - 422 Unprocessable Entity
+  """
   def create(conn, %{"feed" => url}) do
     feed_params = Feed.download(url)
     changeset = Feed.changeset(%Feed{}, feed_params)
@@ -27,6 +61,23 @@ defmodule Reader.FeedController do
     end
   end
 
+  @doc """
+  Show a feed with its items and the 5 newest subscribers.
+
+  GET /feeds/{feed_id}
+
+  ## Params
+
+  Item pagination:
+
+  - `item_limit`, default is 20.
+  - `item_offset`, default is 0.
+
+  ## Responses
+
+  - 200 OK
+  - 404 Not Found
+  """
   def show(conn, %{"id" => id, "item_limit" => item_limit, "item_offset" => item_offset}) do
     feed =
       Repo.get!(feed_summary(conn), id)
@@ -56,7 +107,8 @@ defmodule Reader.FeedController do
 
   ## Responses
 
-  202 Accepted
+  - 202 Accepted
+  - 404 Not found
   """
   def update(conn, %{"id" => id}) do
     feed = Repo.get!(Feed, id)
@@ -66,6 +118,20 @@ defmodule Reader.FeedController do
     |> send_resp(:accepted, "")
   end
 
+  @doc """
+  Delete a feed.
+
+  DELETE /feeds/{feed_id}
+
+  ## TODO
+
+  - [ ] Remove? It should not be posible to remove a feed, not even as a admin.
+  - [ ] Automation of removing. Remove if the feed have no episodes.
+
+  ## Responses
+
+  - 204 No Content
+  """
   def delete(conn, %{"id" => id}) do
     feed = Repo.get!(Feed, id)
 

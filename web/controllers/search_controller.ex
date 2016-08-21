@@ -6,7 +6,11 @@ defmodule Reader.SearchController do
   @doc """
   Search podcasts using Itunes and join with the saved feeds.
 
-  GET /search?q={query}
+  GET /search
+
+  ## Params
+
+  - `q`, the search query.
 
   ## Responses
 

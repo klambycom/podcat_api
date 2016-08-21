@@ -4,6 +4,8 @@ defmodule Reader.Mixfile do
   def project do
     [app: :reader,
      version: "0.0.1",
+     name: "Podcat API",
+     homepage_url: "http://podcat.ninja",
      elixir: "~> 1.2",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -59,7 +61,8 @@ defmodule Reader.Mixfile do
       {:poison, "~> 2.0"},
       {:mogrify, "~> 0.3.3"},
       {:timex, "~> 3.0"},
-      {:timex_ecto, "~> 3.0"}
+      {:timex_ecto, "~> 3.0"},
+      {:ex_doc, "~> 0.12", only: :dev}
     ]
   end
 
