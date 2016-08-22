@@ -18,7 +18,6 @@ defmodule Reader.UserView do
 
   def render("user.json", %{user: user, conn: conn}) do
     data = %{
-      id: user.id,
       name: user.name
     }
 

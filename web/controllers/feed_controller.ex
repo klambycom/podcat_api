@@ -1,7 +1,7 @@
 defmodule Reader.FeedController do
   use Reader.Web, :controller
 
-  alias Reader.{Feed, User}
+  alias Reader.{Feed, User, Subscription}
 
   plug :scrub_params, "feed" when action in [:create]
 
@@ -15,14 +15,27 @@ defmodule Reader.FeedController do
   - [ ] Filter categories
   - [ ] Limit and offset
 
+  ## Params
+
+  - `subscribers[limit]`, default is 5.
+
   ## Responses
 
   - 200 OK
   """
-  def index(conn, _params) do
-    feeds = conn |> feed_summary |> Repo.all
+  def index(conn, %{"subscribers" => subscribers}) do
+    feeds =
+      conn
+      |> feed_summary
+      |> Repo.all
+      |> Repo.preload(
+           subscribers: {Subscription.latest(Map.get(subscribers, "limit", 5)), [:user]}
+         )
+
     render(conn, "index.json", feeds: feeds)
   end
+
+  def index(conn, params), do: index(conn, Map.merge(%{"subscribers" => %{}}, params))
 
   @doc """
   Create a new feed from a url.
@@ -70,34 +83,28 @@ defmodule Reader.FeedController do
 
   Item pagination:
 
-  - `item_limit`, default is 20.
-  - `item_offset`, default is 0.
+  - `item[limit]`, default is 20.
+  - `item[offset]`, default is 0.
+  - `subscribers[limit]`, default is 5.
 
   ## Responses
 
   - 200 OK
   - 404 Not Found
   """
-  def show(conn, %{"id" => id, "item_limit" => item_limit, "item_offset" => item_offset}) do
+  def show(conn, %{"id" => id, "subscribers" => subscribers, "items" => items}) do
     feed =
       Repo.get!(feed_summary(conn), id)
-      |> Repo.preload(items: Feed.Item.latest(item_limit, item_offset))
+      |> Repo.preload(
+           items: Feed.Item.latest(Map.get(items, "limit", 20), Map.get(items, "offset", 0)),
+           subscribers: {Subscription.latest(Map.get(subscribers, "limit", 5)), [:user]}
+         )
 
-    users =
-      User.subscribed_to(feed)
-      |> limit(5)
-      |> Repo.all
-
-    render(conn, "show.json", feed: feed, users: users)
+    render(conn, "show.json", feed: feed)
   end
 
-  def show(conn, params) do
-    params =
-      Map.put_new(params, "item_limit", 20)
-      |> Map.put_new("item_offset", 0)
-
-    show(conn, params)
-  end
+  def show(conn, params),
+    do: show(conn, Map.merge(%{"subscribers" => %{}, "items" => %{}}, params))
 
   @doc """
   Downlaod and update the feed in another process and return 202 Accepted

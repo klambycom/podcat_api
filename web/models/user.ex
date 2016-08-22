@@ -57,15 +57,6 @@ defmodule Reader.User do
       preload: :subscriptions
   end
 
-  @doc """
-  Get users, ordered by inserted at, subscribed to a specific feed.
-  """
-  def subscribed_to(%Feed{id: feed_id}) do
-    from u in __MODULE__,
-      join: s in Subscription, on: s.user_id == u.id and s.feed_id == ^feed_id,
-      order_by: [desc: s.inserted_at]
-  end
-
   defp put_pass_hash(changeset) do
     if Map.has_key?(changeset.changes, :password) do
       password = changeset.changes.password

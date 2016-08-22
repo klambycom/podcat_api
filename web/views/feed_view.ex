@@ -1,7 +1,7 @@
 defmodule Reader.FeedView do
   use Reader.Web, :view
 
-  alias Reader.{UserView, ItemView}
+  alias Reader.{UserView, ItemView, SubscriptionView}
 
   def render("index.json", %{feeds: feeds, conn: conn}),
     do: %{
@@ -14,9 +14,9 @@ defmodule Reader.FeedView do
       }
     }
 
-  def render("show.json", %{feed: feed, users: users, conn: conn}),
+  def render("show.json", %{feed: feed, conn: conn}),
     do: %{
-      data: render_one(feed, __MODULE__, "feed.json", users: users, conn: conn),
+      data: render_one(feed, __MODULE__, "feed.json", conn: conn),
       links: %{
         self: feed_url(conn, :show, feed)
       }
@@ -34,7 +34,9 @@ defmodule Reader.FeedView do
           block: feed.block,
           explicit: feed.explicit,
           feed_url: feed.feed_url,
-          users: Map.get(data, :users, []) |> render_many(UserView, "user.json", conn: conn),
+          subscribers: render_assoc(
+            feed.subscribers, SubscriptionView, "subscriber.json", conn: conn
+          ),
           items: render_assoc(feed.items, ItemView, "item.json", conn: conn),
           nr_of_subscribers: feed.subscriber_count,
           images: %{
@@ -46,7 +48,7 @@ defmodule Reader.FeedView do
             inserted_at: feed.inserted_at,
             updated_at: feed.updated_at,
             subscribed_at: feed.subscribed_at,
-            users_count: Map.get(data, :users, []) |> length_assoc,
+            subscribers_count: length_assoc(feed.subscribers),
             items_count: length_assoc(feed.items)
           },
           links: %{

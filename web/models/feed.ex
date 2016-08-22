@@ -25,6 +25,7 @@ defmodule Reader.Feed do
     field :subscriber_count, :integer, virtual: true
     field :subscribed_at, Ecto.DateTime, virtual: true, default: nil
 
+    has_many :subscribers, Subscription
     many_to_many :users, User, join_through: Subscription
 
     has_many :items, Item

@@ -1,7 +1,7 @@
 defmodule Reader.SearchController do
   use Reader.Web, :controller
 
-  alias Reader.{Search, Feed}
+  alias Reader.{Search, Feed, Subscription}
 
   @doc """
   Search podcasts using Itunes and join with the saved feeds.
@@ -44,8 +44,10 @@ defmodule Reader.SearchController do
 
     if user do
       Repo.get_by!(Feed.summary(user), feed_url: item.feed_url)
+      |> Repo.preload(subscribers: {Subscription.latest(5), [:user]})
     else
       Repo.get_by!(Feed.summary, feed_url: item.feed_url)
+      |> Repo.preload(subscribers: {Subscription.latest(5), [:user]})
     end
   end
 end

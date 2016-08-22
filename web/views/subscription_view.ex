@@ -1,6 +1,8 @@
 defmodule Reader.SubscriptionView do
   use Reader.Web, :view
 
+  alias Reader.UserView
+
   def render("index.json", %{subscriptions: subscriptions, user: user, conn: conn}),
     do: %{
       data: render_many(
@@ -35,4 +37,8 @@ defmodule Reader.SubscriptionView do
         unsubscribe: feed_subscription_url(conn, :delete, subscription.feed)
       }
     }
+
+  def render("subscriber.json", %{subscription: subscription, conn: conn}),
+    do: render_one(subscription.user, UserView, "user.json", conn: conn)
+        |> Map.merge(%{meta: %{subscribed_at: subscription.inserted_at}})
 end

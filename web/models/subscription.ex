@@ -46,4 +46,13 @@ defmodule Reader.Subscription do
         on: c.user_id == ^current_id and c.feed_id == s.feed_id,
       select: %{s | is_subscribed: not is_nil(c.user_id)}
   end
+
+  @doc """
+  Get the latest subscribers.
+  """
+  def latest(limit \\ 5) do
+    from s in __MODULE__,
+      order_by: [desc: :inserted_at],
+      limit: ^limit
+  end
 end
