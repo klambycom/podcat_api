@@ -1,7 +1,7 @@
-defmodule Reader.UserController do
-  use Reader.Web, :controller
+defmodule PodcatApi.UserController do
+  use PodcatApi.Web, :controller
 
-  alias Reader.User
+  alias PodcatApi.User
 
   @doc """
   List all users
@@ -49,7 +49,7 @@ defmodule Reader.UserController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Reader.ChangesetView, "error.json", changeset: changeset)
+        |> render(PodcatApi.ChangesetView, "error.json", changeset: changeset)
     end
   end
 
@@ -96,7 +96,7 @@ defmodule Reader.UserController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Reader.ChangesetView, "error.json", changeset: changeset)
+        |> render(PodcatApi.ChangesetView, "error.json", changeset: changeset)
     end
   end
 

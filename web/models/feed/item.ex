@@ -1,9 +1,9 @@
-defmodule Reader.Feed.Item do
-  use Reader.Web, :model
+defmodule PodcatApi.Feed.Item do
+  use PodcatApi.Web, :model
 
-  alias Reader.Feed
-  alias Reader.Feed.{Explicit, Enclosure, Duration}
-  alias Reader.Xml.ItunesParser
+  alias PodcatApi.Feed
+  alias PodcatApi.Feed.{Explicit, Enclosure, Duration}
+  alias PodcatApi.Xml.ItunesParser
 
   @primary_key false
   schema "feed_items" do

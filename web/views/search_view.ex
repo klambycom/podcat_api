@@ -1,7 +1,7 @@
-defmodule Reader.SearchView do
-  use Reader.Web, :view
+defmodule PodcatApi.SearchView do
+  use PodcatApi.Web, :view
 
-  alias Reader.FeedView
+  alias PodcatApi.FeedView
 
   def render("search.json", %{feeds: feeds, conn: conn}),
     do: %{

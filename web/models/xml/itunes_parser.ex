@@ -1,7 +1,7 @@
-defmodule Reader.Xml.ItunesParser do
-  @behaviour Reader.Parser
+defmodule PodcatApi.Xml.ItunesParser do
+  @behaviour PodcatApi.Parser
 
-  alias Reader.Xml
+  alias PodcatApi.Xml
 
   defmodule Podcast do
     defstruct meta: nil, items: [], feed_url: nil
@@ -96,7 +96,7 @@ defmodule Reader.Xml.ItunesParser do
           }
 
     defp rss_date(nil), do: nil
-    defp rss_date(date), do: Reader.DateUtils.RFC2822.parse(date)
+    defp rss_date(date), do: PodcatApi.DateUtils.RFC2822.parse(date)
   end
 
   defmodule Enclosure do
@@ -123,7 +123,7 @@ defmodule Reader.Xml.ItunesParser do
 
   ## Example
 
-      iex> Reader.Xml.from_string(
+      iex> PodcatApi.Xml.from_string(
       ...>   \"\"\"
       ...>   <?xml version="1.0" encoding="UTF-8" ?>
       ...>   <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
@@ -134,7 +134,7 @@ defmodule Reader.Xml.ItunesParser do
       ...>   </rss>
       ...>   \"\"\"
       ...> )
-      ...> |> Reader.Xml.ItunesParser.valid?
+      ...> |> PodcatApi.Xml.ItunesParser.valid?
       true
   """
   def valid?(document) do

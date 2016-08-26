@@ -1,5 +1,5 @@
-defmodule Reader.Feed.Category do
-  use Reader.Web, :model
+defmodule PodcatApi.Feed.Category do
+  use PodcatApi.Web, :model
 
   schema "feed_categories" do
     field :title, :string
@@ -29,7 +29,7 @@ defmodule Reader.Feed.Category do
 
   ## Example
 
-      iex> Reader.Feed.Category.create_slug("Government &amp; Organizations")
+      iex> PodcatApi.Feed.Category.create_slug("Government &amp; Organizations")
       "government-organizations"
   """
   def create_slug(title),

@@ -1,4 +1,4 @@
-defmodule Reader.Repo.Migrations.CreateUser do
+defmodule PodcatApi.Repo.Migrations.CreateUser do
   use Ecto.Migration
 
   def change do

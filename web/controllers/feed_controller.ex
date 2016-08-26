@@ -1,7 +1,7 @@
-defmodule Reader.FeedController do
-  use Reader.Web, :controller
+defmodule PodcatApi.FeedController do
+  use PodcatApi.Web, :controller
 
-  alias Reader.{Feed, User, Subscription}
+  alias PodcatApi.{Feed, Subscription}
 
   plug :scrub_params, "feed" when action in [:create]
 
@@ -70,7 +70,7 @@ defmodule Reader.FeedController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Reader.ChangesetView, "error.json", changeset: changeset)
+        |> render(PodcatApi.ChangesetView, "error.json", changeset: changeset)
     end
   end
 

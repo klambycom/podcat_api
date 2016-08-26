@@ -1,4 +1,4 @@
-defmodule Reader.Repo.Migrations.CreateFeed.Category do
+defmodule PodcatApi.Repo.Migrations.CreateFeed.Category do
   use Ecto.Migration
 
   def change do

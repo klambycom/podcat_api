@@ -1,7 +1,7 @@
-defmodule Reader.Feed.ExplicitTest do
-  use Reader.ModelCase
+defmodule PodcatApi.Feed.ExplicitTest do
+  use PodcatApi.ModelCase
 
-  alias Reader.Feed.Explicit
+  alias PodcatApi.Feed.Explicit
 
   test "cast clean" do
     assert Explicit.cast("clean") == {:ok, :clean}

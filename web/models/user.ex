@@ -1,7 +1,7 @@
-defmodule Reader.User do
-  use Reader.Web, :model
+defmodule PodcatApi.User do
+  use PodcatApi.Web, :model
 
-  alias Reader.{Feed, Subscription}
+  alias PodcatApi.{Feed, Subscription}
 
   @email_regex ~r/\S+@\S+\.\S+/
 

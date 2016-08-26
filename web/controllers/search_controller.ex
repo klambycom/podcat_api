@@ -1,7 +1,7 @@
-defmodule Reader.SearchController do
-  use Reader.Web, :controller
+defmodule PodcatApi.SearchController do
+  use PodcatApi.Web, :controller
 
-  alias Reader.{Search, Feed, Subscription}
+  alias PodcatApi.{Search, Feed, Subscription}
 
   @doc """
   Search podcasts using Itunes and join with the saved feeds.

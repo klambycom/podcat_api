@@ -1,9 +1,9 @@
-defmodule Reader.Mixfile do
+defmodule PodcatApi.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :reader,
-     version: "0.0.1",
+    [app: :podcat_api,
+     version: "0.1.0",
      name: "Podcat API",
      homepage_url: "http://podcat.ninja",
      elixir: "~> 1.2",
@@ -20,11 +20,10 @@ defmodule Reader.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Reader, []},
+      mod: {PodcatApi, []},
       applications: [
         :phoenix,
         :phoenix_pubsub,
-        :phoenix_html,
         :cowboy,
         :logger,
         :gettext,
@@ -47,12 +46,10 @@ defmodule Reader.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.2.0"},
+      {:phoenix, "~> 1.2.1"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.6"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:httpoison, "~> 0.9.0"},

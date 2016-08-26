@@ -1,7 +1,9 @@
-defmodule Reader.FeedTest do
-  use Reader.ModelCase
+defmodule PodcatApi.FeedTest do
+  use PodcatApi.ModelCase
 
-  alias Reader.Feed
+  alias PodcatApi.Feed
+  alias PodcatApi.Xml.ItunesParser
+  alias PodcatApi.DateUtils.RFC2822
 
   @valid_attrs %{
     title: "some content",
@@ -58,8 +60,8 @@ defmodule Reader.FeedTest do
   end
 
   def itunes_feed_data,
-    do: %Reader.Xml.ItunesParser.Podcast{
-          meta: %Reader.Xml.ItunesParser.Meta{
+    do: %ItunesParser.Podcast{
+          meta: %ItunesParser.Meta{
             title: "Klamby Podcast",
             subtitle: "Klamby Podcast!",
             summary: "Klamby Awesome Podcast",
@@ -71,35 +73,35 @@ defmodule Reader.FeedTest do
             block: false
           },
           items: [
-            %Reader.Xml.ItunesParser.Item{
+            %ItunesParser.Item{
               guid: "85fe04ad626e616030eba0c131b95bdb",
               title: "Klamby 167 - You're part of the sample",
               subtitle: "Subtitle",
               summary: "Summary",
               author: "Me",
               duration: "32:37",
-              published_at: Reader.DateUtils.RFC2822.parse("Tue, 02 Aug 2016 03:39:05 +0000"),
+              published_at: RFC2822.parse("Tue, 02 Aug 2016 03:39:05 +0000"),
               image_url: nil,
               explicit: nil,
               block: false,
-              enclosure: %Reader.Xml.ItunesParser.Enclosure{
+              enclosure: %ItunesParser.Enclosure{
                 url: "http://klamby.com/167.mp3",
                 size: "16341802",
                 type: "audio/mpeg"
               }
             },
-            %Reader.Xml.ItunesParser.Item{
+            %ItunesParser.Item{
               guid: "http://klamby.com/166",
               title: "Klamby 166 - On the periphery of the monolith",
               subtitle: "Subtitle",
               summary: "Description",
               author: "Me",
               duration: "32:32",
-              published_at: Reader.DateUtils.RFC2822.parse("Sat, 23 Jul 2016 12:23:20 +0000"),
+              published_at: RFC2822.parse("Sat, 23 Jul 2016 12:23:20 +0000"),
               image_url: nil,
               explicit: nil,
               block: false,
-              enclosure: %Reader.Xml.ItunesParser.Enclosure{
+              enclosure: %ItunesParser.Enclosure{
                 url: "http://klamby.com/166.mp3",
                 size: "16341802",
                 type: "audio/mpeg"

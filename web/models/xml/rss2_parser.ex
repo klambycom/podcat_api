@@ -1,18 +1,18 @@
-defmodule Reader.Xml.RSS2Parser do
-  @behaviour Reader.Parser
+defmodule PodcatApi.Xml.RSS2Parser do
+  @behaviour PodcatApi.Parser
 
-  alias Reader.Xml
+  alias PodcatApi.Xml
 
   @doc """
   Check if the XML-document is in the RSS2-format.
 
   ## Example
 
-      iex> Reader.Xml.from_string("<channel><title>Klamby Blog</title></channel>")
-      ...> |> Reader.Xml.RSS2Parser.valid?
+      iex> PodcatApi.Xml.from_string("<channel><title>Klamby Blog</title></channel>")
+      ...> |> PodcatApi.Xml.RSS2Parser.valid?
       false
 
-      iex> Reader.Xml.from_string(
+      iex> PodcatApi.Xml.from_string(
       ...>   \"\"\"
       ...>   <?xml version="1.0" encoding="UTF-8" ?>
       ...>   <rss version="2.0">
@@ -20,7 +20,7 @@ defmodule Reader.Xml.RSS2Parser do
       ...>   </rss>
       ...>   \"\"\"
       ...> )
-      ...> |> Reader.Xml.RSS2Parser.valid?
+      ...> |> PodcatApi.Xml.RSS2Parser.valid?
       true
   """
   def valid?(document),
@@ -31,7 +31,7 @@ defmodule Reader.Xml.RSS2Parser do
   @doc """
   ## Example
 
-      iex> Reader.Xml.from_string(
+      iex> PodcatApi.Xml.from_string(
       ...>   \"\"\"
       ...>   <?xml version="1.0" encoding="UTF-8" ?>
       ...>   <rss version="2.0">
@@ -43,7 +43,7 @@ defmodule Reader.Xml.RSS2Parser do
       ...>   </rss>
       ...>   \"\"\"
       ...> )
-      ...> |> Reader.Xml.RSS2Parser.parse
+      ...> |> PodcatApi.Xml.RSS2Parser.parse
       %{
         summary: "Klamby Blog",
         link: "https://klamby.com",

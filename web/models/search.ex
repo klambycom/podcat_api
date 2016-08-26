@@ -1,7 +1,7 @@
-defmodule Reader.Search do
+defmodule PodcatApi.Search do
   defstruct title: "", author: "", genre_ids: [], feed_url: "", image_url: ""
 
-  @http_client Application.get_env(:reader, :http_client)
+  @http_client Application.get_env(:podcat_api, :http_client)
 
   def itunes(term, limit \\ 50) do
     response =

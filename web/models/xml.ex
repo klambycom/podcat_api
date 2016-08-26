@@ -1,4 +1,4 @@
-defmodule Reader.Xml do
+defmodule PodcatApi.Xml do
   @moduledoc """
   Parse XML.
   """
@@ -27,7 +27,7 @@ defmodule Reader.Xml do
 
   ## Example
 
-      iex> Reader.Xml.from_string(
+      iex> PodcatApi.Xml.from_string(
       ...>   \"\"\"
       ...>   <?xml version="1.0" encoding="UTF-8" ?>
       ...>   <rss
@@ -41,7 +41,7 @@ defmodule Reader.Xml do
       ...>   </rss>
       ...>   \"\"\"
       ...> )
-      ...> |> Reader.Xml.namespace?(:itunes)
+      ...> |> PodcatApi.Xml.namespace?(:itunes)
       true
   """
   def namespace?(xml_node, namespace),
@@ -52,7 +52,7 @@ defmodule Reader.Xml do
 
   ## Example
 
-      iex> Reader.Xml.from_string(
+      iex> PodcatApi.Xml.from_string(
       ...>   \"\"\"
       ...>   <?xml version="1.0" encoding="UTF-8" ?>
       ...>   <rss
@@ -66,7 +66,7 @@ defmodule Reader.Xml do
       ...>   </rss>
       ...>   \"\"\"
       ...> )
-      ...> |> Reader.Xml.namespaces
+      ...> |> PodcatApi.Xml.namespaces
       %{
         cc: "http://web.resource.org/cc/",
         itunes: "http://www.itunes.com/dtds/podcast-1.0.dtd"
@@ -85,24 +85,24 @@ defmodule Reader.Xml do
   ## Example
 
       iex> [xml_node] =
-      ...>   Reader.Xml.from_string("<channel><title>Klamby Blog</title></channel>")
-      ...>   |> Reader.Xml.xpath("/channel/title")
+      ...>   PodcatApi.Xml.from_string("<channel><title>Klamby Blog</title></channel>")
+      ...>   |> PodcatApi.Xml.xpath("/channel/title")
       ...>
-      ...> Reader.Xml.text(xml_node)
+      ...> PodcatApi.Xml.text(xml_node)
       "Klamby Blog"
 
   Text from the all XML-elements is returned in a list:
 
-      iex> Reader.Xml.from_string("<channel><title>Klamby Blog</title></channel>")
-      ...> |> Reader.Xml.xpath("/channel/title")
-      ...> |> Reader.Xml.text
+      iex> PodcatApi.Xml.from_string("<channel><title>Klamby Blog</title></channel>")
+      ...> |> PodcatApi.Xml.xpath("/channel/title")
+      ...> |> PodcatApi.Xml.text
       "Klamby Blog"
 
   Or empty string if there is no text:
 
-      iex> Reader.Xml.from_string("<channel><title></title></channel>")
-      ...> |> Reader.Xml.xpath("/channel/title")
-      ...> |> Reader.Xml.text
+      iex> PodcatApi.Xml.from_string("<channel><title></title></channel>")
+      ...> |> PodcatApi.Xml.xpath("/channel/title")
+      ...> |> PodcatApi.Xml.text
       ""
   """
   def text(xmlElement(content: content)), do: text(content, "")
@@ -119,17 +119,17 @@ defmodule Reader.Xml do
   ## Example
 
       iex> [xml_node] =
-      ...>   Reader.Xml.from_string("<rss version='2.0'></rss>")
-      ...>   |> Reader.Xml.xpath("/rss")
+      ...>   PodcatApi.Xml.from_string("<rss version='2.0'></rss>")
+      ...>   |> PodcatApi.Xml.xpath("/rss")
       ...>
-      ...> Reader.Xml.attr(xml_node, "version")
+      ...> PodcatApi.Xml.attr(xml_node, "version")
       "2.0"
 
   The attribute from the first XML-element is returned if the element is in a list:
 
-      iex> Reader.Xml.from_string("<rss version='2.0'></rss>")
-      ...> |> Reader.Xml.xpath("/rss")
-      ...> |> Reader.Xml.attr("version")
+      iex> PodcatApi.Xml.from_string("<rss version='2.0'></rss>")
+      ...> |> PodcatApi.Xml.xpath("/rss")
+      ...> |> PodcatApi.Xml.attr("version")
       "2.0"
   """
   def attr([], _), do: nil

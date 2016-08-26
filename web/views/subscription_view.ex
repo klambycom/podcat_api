@@ -1,16 +1,11 @@
-defmodule Reader.SubscriptionView do
-  use Reader.Web, :view
+defmodule PodcatApi.SubscriptionView do
+  use PodcatApi.Web, :view
 
-  alias Reader.UserView
+  alias PodcatApi.{UserView, SubscriptionView}
 
   def render("index.json", %{subscriptions: subscriptions, user: user, conn: conn}),
     do: %{
-      data: render_many(
-        subscriptions,
-        Reader.SubscriptionView,
-        "subscription.json",
-        conn: conn
-      ),
+      data: render_many(subscriptions, SubscriptionView, "subscription.json", conn: conn),
       links: %{
         self: user_subscription_url(conn, :index, user)
       },

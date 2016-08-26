@@ -1,5 +1,5 @@
-defmodule Reader.PageControllerTest do
-  use Reader.ConnCase
+defmodule PodcatApi.PageControllerTest do
+  use PodcatApi.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"

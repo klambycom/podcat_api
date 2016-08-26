@@ -1,8 +1,8 @@
-defmodule Reader.SubscriptionController do
-  use Reader.Web, :controller
+defmodule PodcatApi.SubscriptionController do
+  use PodcatApi.Web, :controller
 
-  alias Reader.{User, Subscription}
-  alias Reader.SessionController
+  alias PodcatApi.{User, Subscription}
+  alias PodcatApi.SessionController
 
   plug Guardian.Plug.EnsureAuthenticated,
     [handler: SessionController] when action in [:create, :delete]
@@ -63,7 +63,7 @@ defmodule Reader.SubscriptionController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(Reader.ChangesetView, "error.json", changeset: changeset)
+        |> render(PodcatApi.ChangesetView, "error.json", changeset: changeset)
     end
   end
 

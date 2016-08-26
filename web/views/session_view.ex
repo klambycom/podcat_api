@@ -1,5 +1,5 @@
-defmodule Reader.SessionView do
-  use Reader.Web, :view
+defmodule PodcatApi.SessionView do
+  use PodcatApi.Web, :view
 
   def render("login.json", %{user: _user, jwt: jwt, exp: exp}),
     do: %{

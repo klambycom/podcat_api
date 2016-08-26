@@ -1,4 +1,4 @@
-defmodule Reader.DateUtils do
+defmodule PodcatApi.DateUtils do
   @modeledoc """
   Utils for working with date and time.
   """
@@ -25,7 +25,7 @@ defmodule Reader.DateUtils do
          https://www.ietf.org/rfc/rfc2822.txt (3.3. Date and Time Specification)
     """
 
-    alias Reader.DateUtils
+    alias PodcatApi.DateUtils
 
     import String, only: [to_integer: 1]
 
@@ -37,7 +37,7 @@ defmodule Reader.DateUtils do
 
     ## Example
 
-        iex> Reader.DateUtils.RFC2822.parse("Sun, 19 May 2002 15:21:36 GMT")
+        iex> PodcatApi.DateUtils.RFC2822.parse("Sun, 19 May 2002 15:21:36 GMT")
         %DateTime{day: 19, month: 5, year: 2002,
                   hour: 15, minute: 21, second: 36, microsecond: {0, 0},
                   std_offset: 0, utc_offset: 0,
@@ -127,12 +127,12 @@ defmodule Reader.DateUtils do
 
   ## Example
 
-      iex> Reader.DateUtils.time_zone("CDT")
+      iex> PodcatApi.DateUtils.time_zone("CDT")
       "+0500"
 
   Supports military time zones.
 
-      iex> Reader.DateUtils.time_zone("P")
+      iex> PodcatApi.DateUtils.time_zone("P")
       "-0300"
   """
   def time_zone("UT"), do: "+0000"
@@ -179,7 +179,7 @@ defmodule Reader.DateUtils do
 
   ## Example
 
-      iex> Reader.DateUtils.month_to_integer("Apr")
+      iex> PodcatApi.DateUtils.month_to_integer("Apr")
       4
   """
   def month_to_integer("Jan"), do: 1

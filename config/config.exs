@@ -6,15 +6,15 @@
 use Mix.Config
 
 # General application configuration
-config :reader,
-  ecto_repos: [Reader.Repo]
+config :podcat_api,
+  ecto_repos: [PodcatApi.Repo]
 
 # Configures the endpoint
-config :reader, Reader.Endpoint,
+config :podcat_api, PodcatApi.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "cJh9aoIJ+Wt4lNailnyoOnNBwuD11zAlisghKkIXG0tnXAJZQKT5aDMLg8JzwvwP",
-  render_errors: [view: Reader.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Reader.PubSub,
+  render_errors: [view: PodcatApi.ErrorView, accepts: ~w(json)],
+  pubsub: [name: PodcatApi.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
@@ -23,18 +23,18 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Configure HTTP client
-config :reader, :http_client, HTTPoison
+config :podcat_api, :http_client, HTTPoison
 
 # Configure parsers
-config :reader, :parsers, [Reader.Xml.ItunesParser,
-                           Reader.Xml.RSS2Parser]
+config :podcat_api, :parsers, [PodcatApi.Xml.ItunesParser,
+                           PodcatApi.Xml.RSS2Parser]
 
 # Configure Guardian
 config :guardian, Guardian,
-  issuer: "Reader",
+  issuer: "PodcatApi",
   ttl: {30, :days},
   secret_key: "d+cGiffjBJ3lDHWDhHfAW0nNoum6KvpBJwSz84kPn5iKl8jtDKNdDQaVtGJjhjls",
-  serializer: Reader.User.Serializer
+  serializer: PodcatApi.User.Serializer
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

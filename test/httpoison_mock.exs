@@ -1,4 +1,4 @@
-defmodule Reader.HTTPoisonMock do
+defmodule PodcatApi.HTTPoisonMock do
   def get(url) do
     [_, file] = Regex.run(~r/https?:\/\/\S*\/(\S*)/, url)
 

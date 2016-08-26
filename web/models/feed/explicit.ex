@@ -1,4 +1,4 @@
-defmodule Reader.Feed.Explicit do
+defmodule PodcatApi.Feed.Explicit do
   @moduledoc """
   Ecto type for explicit atom.
   """

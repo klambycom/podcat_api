@@ -1,9 +1,9 @@
-defmodule Reader.User.Auth do
+defmodule PodcatApi.User.Auth do
   @modeledoc """
   Authenticate the user with password.
   """
 
-  alias Reader.{Repo, User}
+  alias PodcatApi.{Repo, User}
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   @doc """

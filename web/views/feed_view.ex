@@ -1,7 +1,7 @@
-defmodule Reader.FeedView do
-  use Reader.Web, :view
+defmodule PodcatApi.FeedView do
+  use PodcatApi.Web, :view
 
-  alias Reader.{UserView, ItemView, SubscriptionView}
+  alias PodcatApi.{ItemView, SubscriptionView}
 
   def render("index.json", %{feeds: feeds, conn: conn}),
     do: %{
@@ -22,7 +22,7 @@ defmodule Reader.FeedView do
       }
     }
 
-  def render("feed.json", %{feed: feed, conn: conn} = data),
+  def render("feed.json", %{feed: feed, conn: conn}),
     do: %{
           title: feed.title,
           subtitle: feed.subtitle,

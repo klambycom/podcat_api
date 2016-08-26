@@ -1,7 +1,7 @@
-defmodule Reader.SessionController do
-  use Reader.Web, :controller
+defmodule PodcatApi.SessionController do
+  use PodcatApi.Web, :controller
 
-  alias Reader.User
+  alias PodcatApi.User
 
   plug :scrub_params, "user" when action in [:create]
 

@@ -1,7 +1,7 @@
-defmodule Reader.User.Serializer do
+defmodule PodcatApi.User.Serializer do
   @behaviour Guardian.Serializer
 
-  alias Reader.{Repo, User}
+  alias PodcatApi.{Repo, User}
 
   def for_token(user = %User{}), do: {:ok, "User:#{user.id}"}
   def for_token(_), do: {:error, "Unknown resource type"}

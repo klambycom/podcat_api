@@ -1,7 +1,7 @@
-defmodule Reader.UserTest do
-  use Reader.ModelCase
+defmodule PodcatApi.UserTest do
+  use PodcatApi.ModelCase
 
-  alias Reader.User
+  alias PodcatApi.User
 
   @valid_attrs %{name: "Foo Bar", email: "foo@bar.com", password: "some content"}
   @invalid_attrs %{}

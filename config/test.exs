@@ -2,7 +2,7 @@ use Mix.Config
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :reader, Reader.Endpoint,
+config :podcat_api, PodcatApi.Endpoint,
   http: [port: 4001],
   server: false
 
@@ -10,13 +10,13 @@ config :reader, Reader.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
-config :reader, Reader.Repo,
+config :podcat_api, PodcatApi.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "dev",
   password: "",
-  database: "reader_test",
+  database: "podcat_api_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # Configure HTTP client
-config :reader, :http_client, Reader.HTTPoisonMock
+config :podcat_api, :http_client, PodcatApi.HTTPoisonMock

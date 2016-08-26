@@ -1,4 +1,4 @@
-defmodule Reader.ViewHelpers do
+defmodule PodcatApi.ViewHelpers do
   @doc """
   Render a collection of associations or a empty list. Works even if the association
   is not preloaded.

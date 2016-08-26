@@ -1,4 +1,4 @@
-defmodule Reader.Xml.RSS2ParserTest do
-  use Reader.ModelCase
-  doctest Reader.Xml.RSS2Parser
+defmodule PodcatApi.Xml.RSS2ParserTest do
+  use PodcatApi.ModelCase
+  doctest PodcatApi.Xml.RSS2Parser
 end

@@ -1,4 +1,4 @@
-defmodule Reader.Repo.Migrations.AddItunesFieldsToFeed do
+defmodule PodcatApi.Repo.Migrations.AddItunesFieldsToFeed do
   use Ecto.Migration
 
   def change do

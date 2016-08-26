@@ -1,13 +1,13 @@
-defmodule Reader.Feed.CategoryTest do
-  use Reader.ModelCase
+defmodule PodcatApi.Feed.CategoryTest do
+  use PodcatApi.ModelCase
 
-  doctest Reader.Feed.Category
+  doctest PodcatApi.Feed.Category
 
-  alias Reader.Feed.Category
+  alias PodcatApi.Feed.Category
 
   @valid_attrs %{
     itunes_id: 42,
-    parent_id: "7488a646-e31f-11e4-aace-600308960662",
+    parent_id: 1,
     slug: "some-content",
     summary: "some content",
     title: "some content"

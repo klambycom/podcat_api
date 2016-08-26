@@ -1,5 +1,5 @@
-defmodule Reader.Router do
-  use Reader.Web, :router
+defmodule PodcatApi.Router do
+  use PodcatApi.Web, :router
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -10,7 +10,7 @@ defmodule Reader.Router do
     plug Guardian.Plug.LoadResource
   end
 
-  scope "/api", Reader do
+  scope "/api", PodcatApi do
     pipe_through [:api, :api_auth]
 
     post "/login", SessionController, :create, as: :login

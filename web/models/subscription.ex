@@ -1,7 +1,7 @@
-defmodule Reader.Subscription do
-  use Reader.Web, :model
+defmodule PodcatApi.Subscription do
+  use PodcatApi.Web, :model
 
-  alias Reader.{User, Feed, Subscription}
+  alias PodcatApi.{User, Feed, Subscription}
 
   @primary_key {:id, :binary_id, autogenerate: true}
 

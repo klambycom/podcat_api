@@ -1,7 +1,7 @@
-defmodule Reader.Feed.DurationTest do
-  use Reader.ModelCase
+defmodule PodcatApi.Feed.DurationTest do
+  use PodcatApi.ModelCase
 
-  alias Reader.Feed.Duration
+  alias PodcatApi.Feed.Duration
 
   test "cast ss" do
     assert Duration.cast("1234") == {:ok, 1234}

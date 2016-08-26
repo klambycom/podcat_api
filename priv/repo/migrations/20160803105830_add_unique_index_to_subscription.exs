@@ -1,4 +1,4 @@
-defmodule Reader.Repo.Migrations.AddUniqueIndexToSubscription do
+defmodule PodcatApi.Repo.Migrations.AddUniqueIndexToSubscription do
   use Ecto.Migration
 
   def change do

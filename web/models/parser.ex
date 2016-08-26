@@ -1,8 +1,8 @@
-defmodule Reader.Parser do
+defmodule PodcatApi.Parser do
   @callback valid?(tuple) :: boolean
   @callback parse(tuple) :: map
 
-  @parsers Application.get_env(:reader, :parsers)
+  @parsers Application.get_env(:podcat_api, :parsers)
 
   @doc """
   Parse a document with the correct parser.

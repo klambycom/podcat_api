@@ -1,8 +1,8 @@
-defmodule Reader.Feed.ItemTest do
-  use Reader.ModelCase
+defmodule PodcatApi.Feed.ItemTest do
+  use PodcatApi.ModelCase
 
-  alias Reader.Feed.Item
-  alias Reader.Xml.ItunesParser
+  alias PodcatApi.Feed.Item
+  alias PodcatApi.Xml.ItunesParser
 
   @valid_item %ItunesParser.Item{
     guid: "unique_id",
@@ -10,7 +10,7 @@ defmodule Reader.Feed.ItemTest do
     block: true,
     duration: "21:43",
     explicit: 42,
-    published_at: Reader.DateUtils.RFC2822.parse("Sun, 19 May 2002 15:21:36 GMT"),
+    published_at: PodcatApi.DateUtils.RFC2822.parse("Sun, 19 May 2002 15:21:36 GMT"),
     subtitle: "some content",
     summary: "some content",
     title: "some content",

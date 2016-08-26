@@ -1,13 +1,13 @@
-defmodule Reader.Feed do
-  use Reader.Web, :model
+defmodule PodcatApi.Feed do
+  use PodcatApi.Web, :model
 
-  alias Reader.{User, Subscription}
-  alias Reader.Xml
-  alias Reader.Xml.ItunesParser.Podcast
-  alias Reader.Feed.{Explicit, Item}
-  alias Reader.Parser
+  alias PodcatApi.{User, Subscription}
+  alias PodcatApi.Xml
+  alias PodcatApi.Xml.ItunesParser.Podcast
+  alias PodcatApi.Feed.{Explicit, Item}
+  alias PodcatApi.Parser
 
-  @http_client Application.get_env(:reader, :http_client)
+  @http_client Application.get_env(:podcat_api, :http_client)
 
   schema "feeds" do
     field :title, :string

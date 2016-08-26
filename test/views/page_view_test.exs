@@ -1,3 +1,3 @@
-defmodule Reader.PageViewTest do
-  use Reader.ConnCase, async: true
+defmodule PodcatApi.PageViewTest do
+  use PodcatApi.ConnCase, async: true
 end

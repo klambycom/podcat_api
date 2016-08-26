@@ -1,3 +1,3 @@
-defmodule Reader.PageView do
-  use Reader.Web, :view
+defmodule PodcatApi.PageView do
+  use PodcatApi.Web, :view
 end

@@ -1,4 +1,4 @@
-defmodule Reader.Feed.Duration do
+defmodule PodcatApi.Feed.Duration do
   @moduledoc """
   Ecto type for enclosure duration. The duration is represented as seconds in the
   DB and a tuple in the code (`{hh, mm, ss}`).

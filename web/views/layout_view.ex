@@ -1,5 +1,5 @@
-defmodule Reader.LayoutView do
-  use Reader.Web, :view
+defmodule PodcatApi.LayoutView do
+  use PodcatApi.Web, :view
 
   @doc """
   Get the current user.

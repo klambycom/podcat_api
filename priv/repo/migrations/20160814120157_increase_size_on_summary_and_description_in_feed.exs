@@ -1,4 +1,4 @@
-defmodule Reader.Repo.Migrations.IncreaseSizeOnSummaryAndDescriptionInFeed do
+defmodule PodcatApi.Repo.Migrations.IncreaseSizeOnSummaryAndDescriptionInFeed do
   use Ecto.Migration
 
   def change do

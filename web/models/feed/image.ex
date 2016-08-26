@@ -1,7 +1,7 @@
-defmodule Reader.Feed.Image do
-  alias Reader.Feed
+defmodule PodcatApi.Feed.Image do
+  alias PodcatApi.Feed
 
-  @http_client Application.get_env(:reader, :http_client)
+  @http_client Application.get_env(:podcat_api, :http_client)
 
   @doc """
   Download the image.

@@ -1,7 +1,7 @@
-defmodule Reader.ItemView do
-  use Reader.Web, :view
+defmodule PodcatApi.ItemView do
+  use PodcatApi.Web, :view
 
-  alias Reader.Feed.Enclosure
+  alias PodcatApi.Feed.Enclosure
 
   def render("item.json", %{item: item, conn: _conn}),
     do: %{

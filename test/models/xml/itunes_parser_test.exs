@@ -1,9 +1,9 @@
-defmodule Reader.Xml.ItunesParserTest do
-  use Reader.ModelCase
-  doctest Reader.Xml.ItunesParser
+defmodule PodcatApi.Xml.ItunesParserTest do
+  use PodcatApi.ModelCase
+  doctest PodcatApi.Xml.ItunesParser
 
-  alias Reader.Xml
-  alias Reader.Xml.ItunesParser
+  alias PodcatApi.Xml
+  alias PodcatApi.Xml.ItunesParser
 
   test "valid? is false when the itunes namespace is missing" do
     document =
@@ -79,7 +79,7 @@ defmodule Reader.Xml.ItunesParserTest do
         summary: "Summary",
         author: "Me",
         duration: "32:37",
-        published_at: Reader.DateUtils.RFC2822.parse("Tue, 02 Aug 2016 03:39:05 +0000"),
+        published_at: PodcatApi.DateUtils.RFC2822.parse("Tue, 02 Aug 2016 03:39:05 +0000"),
         image_url: nil,
         explicit: nil,
         block: false,
@@ -96,7 +96,7 @@ defmodule Reader.Xml.ItunesParserTest do
         summary: "Description",
         author: "Me",
         duration: "32:32",
-        published_at: Reader.DateUtils.RFC2822.parse("Sat, 23 Jul 2016 12:23:20 +0000"),
+        published_at: PodcatApi.DateUtils.RFC2822.parse("Sat, 23 Jul 2016 12:23:20 +0000"),
         image_url: nil,
         explicit: nil,
         block: false,

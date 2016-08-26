@@ -1,4 +1,4 @@
-defmodule Reader.Feed.Enclosure do
+defmodule PodcatApi.Feed.Enclosure do
   @moduledoc """
   RSS enclosure, attached multimedia content by providing URL to the file, size
   of the file in bytes (length) and the mime type.
@@ -10,9 +10,9 @@ defmodule Reader.Feed.Enclosure do
   - WMA (Windows Audio Media)
   """
 
-  use Reader.Web, :model
+  use PodcatApi.Web, :model
 
-  alias Reader.Xml.ItunesParser
+  alias PodcatApi.Xml.ItunesParser
 
   embedded_schema do
     field :url, :string

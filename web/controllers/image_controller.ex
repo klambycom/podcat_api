@@ -1,7 +1,7 @@
-defmodule Reader.ImageController do
-  use Reader.Web, :controller
+defmodule PodcatApi.ImageController do
+  use PodcatApi.Web, :controller
 
-  alias Reader.Feed
+  alias PodcatApi.Feed
 
   @max_age 31 * 24 * 60 * 60 # One month
 

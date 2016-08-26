@@ -1,12 +1,12 @@
-defmodule Reader.Web do
+defmodule PodcatApi.Web do
   @moduledoc """
   A module that keeps using definitions for controllers,
   views and so on.
 
   This can be used in your application as:
 
-      use Reader.Web, :controller
-      use Reader.Web, :view
+      use PodcatApi.Web, :controller
+      use PodcatApi.Web, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -31,12 +31,12 @@ defmodule Reader.Web do
     quote do
       use Phoenix.Controller
 
-      alias Reader.Repo
+      alias PodcatApi.Repo
       import Ecto
       import Ecto.Query
 
-      import Reader.Router.Helpers
-      import Reader.Gettext
+      import PodcatApi.Router.Helpers
+      import PodcatApi.Gettext
     end
   end
 
@@ -47,13 +47,10 @@ defmodule Reader.Web do
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
 
-      # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
-
-      import Reader.Router.Helpers
-      import Reader.ErrorHelpers
-      import Reader.Gettext
-      import Reader.ViewHelpers
+      import PodcatApi.Router.Helpers
+      import PodcatApi.ErrorHelpers
+      import PodcatApi.Gettext
+      import PodcatApi.ViewHelpers
     end
   end
 
@@ -67,10 +64,10 @@ defmodule Reader.Web do
     quote do
       use Phoenix.Channel
 
-      alias Reader.Repo
+      alias PodcatApi.Repo
       import Ecto
       import Ecto.Query
-      import Reader.Gettext
+      import PodcatApi.Gettext
     end
   end
 

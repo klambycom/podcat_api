@@ -1,3 +1,3 @@
-defmodule Reader.LayoutViewTest do
-  use Reader.ConnCase, async: true
+defmodule PodcatApi.LayoutViewTest do
+  use PodcatApi.ConnCase, async: true
 end

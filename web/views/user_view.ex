@@ -1,5 +1,5 @@
-defmodule Reader.UserView do
-  use Reader.Web, :view
+defmodule PodcatApi.UserView do
+  use PodcatApi.Web, :view
 
   def render("index.json", %{users: users, conn: conn}),
     do: %{
