@@ -24,7 +24,8 @@ defmodule Reader.Xml.ItunesParser do
               copyright: nil,
               image_url: nil,
               block: false,
-              explicit: nil
+              explicit: nil,
+              categories: []
 
     @doc """
     Parse data about the podcast.
@@ -43,8 +44,14 @@ defmodule Reader.Xml.ItunesParser do
             copyright: document |> Xml.xpath("./copyright") |> Xml.text,
             image_url: document |> Xml.xpath("./itunes:image") |> Xml.attr("href"),
             block: document |> Xml.ItunesParser.is_blocked,
-            explicit: document |> Xml.xpath("./itunes:explicit") |> Xml.text
+            explicit: document |> Xml.xpath("./itunes:explicit") |> Xml.text,
+            categories: document |> categories |> List.flatten
           }
+
+    # Get categories and subcategories
+    defp categories(document),
+      do: for x <- Xml.xpath(document, "./itunes:category"),
+            do: [Xml.attr(x, "text")] ++ categories(x)
   end
 
   defmodule Item do

@@ -58,7 +58,16 @@ defmodule Reader.Xml.ItunesParserTest do
           copyright: "christian",
           image_url: "http://klamby.com/bild.jpg",
           block: false,
-          explicit: "yes"
+          explicit: "yes",
+          categories: [
+            "Audio Blogs",
+            "Movies & Entertainment",
+            "Technology",
+            "Computers",
+            "Business",
+            "Finance",
+            "Illegal (but should work)"
+          ]
         }
 
   def item_list,
@@ -114,6 +123,16 @@ defmodule Reader.Xml.ItunesParserTest do
               <link>https://klamby.com</link>
               <copyright>christian</copyright>
               <itunes:image href="http://klamby.com/bild.jpg" />
+              <itunes:category text="Audio Blogs" />
+              <itunes:category text="Movies &amp; Entertainment" />
+              <itunes:category text="Technology">
+                <itunes:category text="Computers" />
+              </itunes:category>
+              <itunes:category text="Business">
+                <itunes:category text="Finance">
+                  <itunes:category text="Illegal (but should work)" />
+                </itunes:category>
+              </itunes:category>
               <item>
                 <guid>85fe04ad626e616030eba0c131b95bdb</guid>
                 <title>Klamby 167 - You're part of the sample</title>
@@ -154,6 +173,16 @@ defmodule Reader.Xml.ItunesParserTest do
               <link>https://klamby.com</link>
               <copyright>christian</copyright>
               <itunes:image href="http://klamby.com/bild.jpg" />
+              <itunes:category text="Audio Blogs" />
+              <itunes:category text="Movies &amp; Entertainment" />
+              <itunes:category text="Technology">
+                <itunes:category text="Computers" />
+              </itunes:category>
+              <itunes:category text="Business">
+                <itunes:category text="Finance">
+                  <itunes:category text="Illegal (but should work)" />
+                </itunes:category>
+              </itunes:category>
             </channel>
           </rss>
           """
