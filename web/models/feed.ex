@@ -34,7 +34,7 @@ defmodule PodcatApi.Feed do
   end
 
   @required_fields ~w(title author summary feed_url)
-  @optional_fields ~w(subtitle summary link description image_url copyright block explicit)
+  @optional_fields ~w(subtitle link description image_url copyright block explicit)
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
@@ -62,7 +62,8 @@ defmodule PodcatApi.Feed do
   def changeset(struct, params),
     do: struct
         |> cast(params, @required_fields, @optional_fields)
-        |> unique_constraint(:feed_url)
+        |> unique_constraint(:feed_url, name: :feeds_pkey)
+        |> unique_constraint(:feed_url, name: :feeds_feed_url_index)
 
   @doc """
   Download and parse feed from url.

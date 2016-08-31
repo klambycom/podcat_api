@@ -33,8 +33,9 @@ defmodule PodcatApi.SearchController do
       Feed.changeset(
         %Feed{},
         %{
-          "summary" => item.title,
+          "title" => item.title,
           "author" => item.author,
+          "summary" => "",
           "feed_url" => item.feed_url,
           "image_url" => item.image_url
         }
