@@ -24,6 +24,7 @@ defmodule PodcatApi.FeedView do
 
   def render("feed.json", %{feed: feed, conn: conn}),
     do: %{
+          id: feed.id,
           title: feed.title,
           subtitle: feed.subtitle,
           summary: feed.summary,

@@ -16,6 +16,7 @@ defmodule PodcatApi.SubscriptionView do
 
   def render("subscription.json", %{subscription: subscription, conn: conn}),
     do: %{
+      id: subscription.feed.id,
       summary: subscription.feed.summary,
       description: subscription.feed.description,
       link: subscription.feed.link,

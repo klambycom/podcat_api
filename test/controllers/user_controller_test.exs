@@ -18,7 +18,8 @@ defmodule PodcatApi.UserControllerTest do
     user = Repo.insert! %User{}
     conn = get conn, user_path(conn, :show, user)
     assert json_response(conn, 200)["data"] == %{
-      "name" => user.name
+      "name" => user.name,
+      "id" => user.id
     }
   end
 

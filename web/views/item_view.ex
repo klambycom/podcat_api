@@ -5,7 +5,7 @@ defmodule PodcatApi.ItemView do
 
   def render("item.json", %{item: item, conn: _conn}),
     do: %{
-          uuid: item.uuid,
+          id: item.uuid,
           title: item.title,
           subtitle: item.subtitle,
           author: item.author,
