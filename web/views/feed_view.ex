@@ -5,22 +5,23 @@ defmodule PodcatApi.FeedView do
 
   def render("index.json", %{feeds: feeds, conn: conn}),
     do: %{
-      data: render_many(feeds, __MODULE__, "feed.json", conn: conn),
-      links: %{
-        self: feed_url(conn, :index)
-      },
+      data: render_many(feeds, __MODULE__, "show.json", conn: conn),
+      links: [
+        %{
+          rel: "self",
+          href: feed_url(conn, :index),
+          method: "GET"
+        }
+      ],
       meta: %{
         count: length(feeds)
       }
     }
 
   def render("show.json", %{feed: feed, conn: conn}),
-    do: %{
-      data: render_one(feed, __MODULE__, "feed.json", conn: conn),
-      links: %{
-        self: feed_url(conn, :show, feed)
-      }
-    }
+    do: %{data: render_one(feed, __MODULE__, "feed.json", conn: conn)}
+        |> links(feed, conn)
+        |> meta(feed)
 
   def render("feed.json", %{feed: feed, conn: conn}),
     do: %{
@@ -44,19 +45,39 @@ defmodule PodcatApi.FeedView do
             "50": feed_image_url(conn, :show, feed, size: 50),
             "100": feed_image_url(conn, :show, feed, size: 100),
             "600": feed_image_url(conn, :show, feed, size: 600)
+          }
+        }
+
+  defp links(data, feed, conn),
+    do: Map.put(data, :links, [
+          %{
+            rel: "self",
+            href: feed_url(conn, :show, feed),
+            method: "GET"
           },
-          meta: %{
+          %{
+            rel: "delete",
+            href: feed_url(conn, :delete, feed),
+            method: "DELETE"
+          },
+          %{
+            rel: "subscribe",
+            href: feed_subscription_url(conn, :create, feed),
+            method: "POST"
+          },
+          %{
+            rel: "self",
+            href: feed_subscription_url(conn, :delete, feed),
+            method: "DELETE"
+          }
+        ])
+
+  defp meta(data, feed),
+    do: Map.put(data, :meta, %{
             inserted_at: feed.inserted_at,
             updated_at: feed.updated_at,
             subscribed_at: feed.subscribed_at,
             subscribers_count: length_assoc(feed.subscribers),
             items_count: length_assoc(feed.items)
-          },
-          links: %{
-            self: feed_url(conn, :show, feed),
-            delete: feed_url(conn, :delete, feed),
-            subscribe: feed_subscription_url(conn, :create, feed),
-            unsubscribe: feed_subscription_url(conn, :delete, feed)
-          }
-        }
+        })
 end
