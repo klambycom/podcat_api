@@ -3,44 +3,60 @@ defmodule PodcatApi.UserView do
 
   def render("index.json", %{users: users, conn: conn}),
     do: %{
-      data: render_many(users, __MODULE__, "user.json", conn: conn),
-      links: %{
-        self: user_url(conn, :index)
-      },
+      data: render_many(users, __MODULE__, "show.json", conn: conn),
+      links: [
+        %{
+          rel: "self",
+          href: user_url(conn, :index),
+          method: "GET"
+        }
+      ],
       meta: %{
         count: length(users)
       }
     }
 
   def render("show.json", %{user: user, conn: conn}),
-    do: %{data: render_one(user, __MODULE__, "user.json", conn: nil)}
-        |> add_links(user, conn)
+    do: %{data: render_one(user, __MODULE__, "user.json", conn: conn)}
+        |> links(user, conn)
 
-  def render("user.json", %{user: user, conn: conn}) do
-    data = %{
-      id: user.id,
-      name: user.name
-    }
+  def render("user.json", %{user: user, conn: conn}),
+    do: %{
+          id: user.id,
+          name: user.name
+        }
 
-    if conn do
-      data |> add_links(user, conn)
-    else
-      data
-    end
-  end
+  defp links(data, user, conn) do
+    links =
+      if is_current_user(conn, user) do
+        [
+          %{
+            rel: "self",
+            href: user_url(conn, :show, user),
+            method: "GET"
+          },
+          %{
+            rel: "self",
+            href: "TODO",
+            method: "GET"
+          },
+          %{
+            rel: "self",
+            href: "TODO",
+            method: "GET"
+          }
+        ]
+      else
+        [
+          %{
+            rel: "self",
+            href: user_url(conn, :show, user),
+            method: "GET"
+          }
+        ]
+      end
 
-  defp add_links(data, user, conn) do
-    if is_current_user(conn, user) do
-      Map.put(data, :links, %{
-        self: user_url(conn, :show, user),
-        subscriptions: "TODO",
-        playlist: "TODO"
-      })
-    else
-      Map.put(data, :links, %{
-        self: user_url(conn, :show, user)
-      })
-    end
+    Map.put(data, :links, links)
   end
 
   defp is_current_user(conn, user) do
