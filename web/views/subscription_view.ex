@@ -6,9 +6,13 @@ defmodule PodcatApi.SubscriptionView do
   def render("index.json", %{subscriptions: subscriptions, user: user, conn: conn}),
     do: %{
       data: render_many(subscriptions, SubscriptionView, "subscription.json", conn: conn),
-      links: %{
-        self: user_subscription_url(conn, :index, user)
-      },
+      links: [
+        %{
+          rel: "self",
+          href: user_subscription_url(conn, :index, user),
+          method: "GET"
+        }
+      ],
       meta: %{
         count: length(subscriptions)
       }
@@ -27,11 +31,23 @@ defmodule PodcatApi.SubscriptionView do
         updated_at: subscription.feed.updated_at,
         is_subscribed: subscription.is_subscribed
       },
-      links: %{
-        feed: feed_url(conn, :show, subscription.feed),
-        subscribe: feed_subscription_url(conn, :create, subscription.feed),
-        unsubscribe: feed_subscription_url(conn, :delete, subscription.feed)
-      }
+      links: [
+        %{
+          rel: "feed",
+          href: feed_url(conn, :show, subscription.feed),
+          method: "GET"
+        },
+        %{
+          rel: "subscribe",
+          href: feed_subscription_url(conn, :create, subscription.feed),
+          mehtod: "POST"
+        },
+        %{
+          rel: "unsubscribe",
+          href: feed_subscription_url(conn, :delete, subscription.feed),
+          mehtod: "DELETE"
+        }
+      ]
     }
 
   def render("subscriber.json", %{subscription: subscription, conn: conn}),

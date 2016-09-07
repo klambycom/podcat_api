@@ -6,9 +6,13 @@ defmodule PodcatApi.SearchView do
   def render("search.json", %{feeds: feeds, conn: conn}),
     do: %{
       data: render_many(feeds, FeedView, "feed.json", conn: conn),
-      links: %{
-        self: search_url(conn, :search)
-      },
+      links: [
+        %{
+          rel: "self",
+          href: search_url(conn, :search),
+          method: "GET"
+        }
+      ],
       meta: %{
         count: length(feeds)
       }
