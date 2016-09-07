@@ -32,7 +32,8 @@ defmodule PodcatApi.Mixfile do
         :httpoison,
         :comeonin,
         :timex,
-        :timex_ecto
+        :timex_ecto,
+        :corsica
       ]
     ]
   end
@@ -59,7 +60,8 @@ defmodule PodcatApi.Mixfile do
       {:mogrify, "~> 0.3.3"},
       {:timex, "~> 3.0"},
       {:timex_ecto, "~> 3.0"},
-      {:ex_doc, "~> 0.12", only: :dev}
+      {:ex_doc, "~> 0.12", only: :dev},
+      {:corsica, "~> 0.4"}
     ]
   end
 
