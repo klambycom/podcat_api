@@ -1,6 +1,8 @@
 defmodule PodcatApi.UserView do
   use PodcatApi.Web, :view
 
+  alias PodcatApi.User
+
   def render("index.json", %{users: users, conn: conn}),
     do: %{
       data: render_many(users, __MODULE__, "show.json", conn: conn),
@@ -23,7 +25,12 @@ defmodule PodcatApi.UserView do
   def render("user.json", %{user: user, conn: conn}),
     do: %{
           id: user.id,
-          name: user.name
+          name: user.name,
+          images: %{
+            "40" => User.gravatar_url(user, 40),
+            "80" => User.gravatar_url(user, 80),
+            "160" => User.gravatar_url(user, 160)
+          }
         }
 
   defp links(data, user, conn) do

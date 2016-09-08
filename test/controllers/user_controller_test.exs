@@ -15,11 +15,16 @@ defmodule PodcatApi.UserControllerTest do
   end
 
   test "shows chosen resource", %{conn: conn} do
-    user = Repo.insert! %User{}
+    user = Repo.insert! %User{email: "foo@bar.com"}
     conn = get conn, user_path(conn, :show, user)
     assert json_response(conn, 200)["data"] == %{
       "name" => user.name,
-      "id" => user.id
+      "id" => user.id,
+      "images" => %{
+        "40" => User.gravatar_url(user, 40),
+        "80" => User.gravatar_url(user, 80),
+        "160" => User.gravatar_url(user, 160)
+      }
     }
   end
 
