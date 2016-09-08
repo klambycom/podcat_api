@@ -57,6 +57,27 @@ defmodule PodcatApi.User do
       preload: :subscriptions
   end
 
+  @doc """
+  Get url to Gravatar-image.
+
+  ## Example
+
+      iex> PodcatApi.User.gravatar_url(%User{email: "foo@bar.com"}, 50)
+      "https://www.gravatar.com/avatar/f3ada405ce890b6f8204094deb12d8a8?d=identicon&s=50"
+  """
+  def gravatar_url(%__MODULE__{email: email_address}, size \\ 80) do
+    hash =
+      email_address
+      |> String.trim
+      |> String.downcase
+      |> :erlang.md5
+      |> Base.encode16(case: :lower)
+
+    params = %{"d" => "identicon", "s" => size}
+
+    "https://www.gravatar.com/avatar/#{hash}?#{URI.encode_query(params)}"
+  end
+
   defp put_pass_hash(changeset) do
     if Map.has_key?(changeset.changes, :password) do
       password = changeset.changes.password

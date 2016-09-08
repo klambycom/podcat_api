@@ -2,6 +2,7 @@ defmodule PodcatApi.UserTest do
   use PodcatApi.ModelCase
 
   alias PodcatApi.User
+  doctest PodcatApi.User
 
   @valid_attrs %{name: "Foo Bar", email: "foo@bar.com", password: "some content"}
   @invalid_attrs %{}
@@ -56,5 +57,21 @@ defmodule PodcatApi.UserTest do
   test "login_changeset with invalid attributes" do
     changeset = User.changeset(%User{}, @invalid_login_attrs)
     refute changeset.valid?
+  end
+
+  test "gravatar url from user" do
+    url =
+      %User{email: "MyEmailAddress@example.com "}
+      |> User.gravatar_url
+
+    assert url == "https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346?d=identicon&s=80"
+  end
+
+  test "bigger gravatar url from user" do
+    url =
+      %User{email: "MyEmailAddress@example.com "}
+      |> User.gravatar_url(200)
+
+    assert url == "https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346?d=identicon&s=200"
   end
 end
