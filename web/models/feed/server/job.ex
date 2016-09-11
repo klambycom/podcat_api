@@ -8,21 +8,19 @@ defmodule PodcatApi.Feed.Server.Job do
   alias PodcatApi.Feed
 
   @doc """
-  Create a new job from a `%PodcatApi.Feed{}`.
+  Create a new job.
 
   ## Example
 
-      iex> %PodcatApi.Feed{id: 123}
-      ...> |> PodcatApi.Feed.Server.Job.new
+      iex> PodcatApi.Feed.Server.Job.new(123)
       %PodcatApi.Feed.Server.Job{feed_id: 123, priority: :low}
 
   Set high priority:
 
-      iex> %PodcatApi.Feed{id: 123}
-      ...> |> PodcatApi.Feed.Server.Job.new(:high)
+      iex> PodcatApi.Feed.Server.Job.new(123, :high)
       %PodcatApi.Feed.Server.Job{feed_id: 123, priority: :high}
   """
-  def new(feed, atom \\ :low)
-  def new(%Feed{id: id}, :low), do: %__MODULE__{feed_id: id}
-  def new(%Feed{id: id}, :high), do: %__MODULE__{feed_id: id, priority: :high}
+  def new(feed_id, atom \\ :low)
+  def new(feed_id, :low), do: %__MODULE__{feed_id: feed_id}
+  def new(feed_id, :high), do: %__MODULE__{feed_id: feed_id, priority: :high}
 end
