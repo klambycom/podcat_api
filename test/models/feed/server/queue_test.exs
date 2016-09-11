@@ -1,4 +1,6 @@
 defmodule PodcatApi.Feed.Server.QueueTest do
-  use PodcatApi.ModelCase
-  doctest PodcatApi.Feed.Server.Queue
+  use PodcatApi.ModelCase, async: false
+
+  alias PodcatApi.Feed.Server.{Queue, Job}
+  doctest Queue
 end
