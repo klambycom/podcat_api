@@ -7,7 +7,7 @@ defmodule PodcatApi.Feed.Server.Queue do
 
   use GenServer
 
-  alias PodcatApi.Feed.Server.Job
+  alias PodcatApi.Download.Job
 
   @doc """
   Start a new queue server.

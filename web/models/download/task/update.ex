@@ -7,7 +7,7 @@ defmodule PodcatApi.Download.Task.Update do
 
   alias PodcatApi.{Repo, Feed}
   alias PodcatApi.{Xml, Parser}
-  alias PodcatApi.Feed.Server.Job
+  alias PodcatApi.Download.Job
 
   @http_client Application.get_env(:podcat_api, :http_client)
 
