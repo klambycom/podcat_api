@@ -33,7 +33,8 @@ defmodule PodcatApi.Mixfile do
         :comeonin,
         :timex,
         :timex_ecto,
-        :corsica
+        :corsica,
+        :poolboy
       ]
     ]
   end
@@ -61,7 +62,8 @@ defmodule PodcatApi.Mixfile do
       {:timex, "~> 3.0"},
       {:timex_ecto, "~> 3.0"},
       {:ex_doc, "~> 0.12", only: :dev},
-      {:corsica, "~> 0.4"}
+      {:corsica, "~> 0.4"},
+      {:poolboy, "~> 1.5"}
     ]
   end
 
