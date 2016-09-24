@@ -13,14 +13,14 @@ defmodule PodcatApi.Download.Worker do
     {:ok, state}
   end
 
-  def process(pid, feed_id), do: GenServer.call(pid, {:process, feed_id})
+  def process(pid, job), do: GenServer.call(pid, {:process, job})
 
   #
   # GenServer implementation
   #
 
-  def handle_call({:process, feed_id}, _, state) do
-    result = Task.run_all(feed_id)
+  def handle_call({:process, job}, _, state) do
+    result = Task.run_all(job)
 
     case result do
       {:ok, job} -> Logger.info(job)

@@ -2,14 +2,14 @@ defmodule PodcatApi.Download do
   use Application
 
   alias PodcatApi.Feed
-  alias PodcatApi.Download.Worker
+  alias PodcatApi.Download.{Worker, Job}
 
   @pool_name :download_pool
 
   def start_link do
     poolboy_config = [
       {:name, {:local, @pool_name}},
-      {:worker_module, PodcatApi.Download.Worker},
+      {:worker_module, Worker},
       {:size, 2},
       {:max_overflow, 1}
     ]
@@ -29,7 +29,8 @@ defmodule PodcatApi.Download do
   @doc """
   Download feed.
   """
-  def feed(%Feed{id: feed_id}) do
-    :poolboy.transaction(@pool_name, &Worker.process(&1, feed_id))
+  def feed(%Feed{} = feed) do
+    job = Job.new(feed)
+    :poolboy.transaction(@pool_name, &Worker.process(&1, job))
   end
 end
