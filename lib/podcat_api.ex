@@ -12,6 +12,8 @@ defmodule PodcatApi do
       supervisor(PodcatApi.Repo, []),
       # Start the endpoint when the application starts
       supervisor(PodcatApi.Endpoint, []),
+      # Start the download queue
+      supervisor(PodcatApi.Download, []),
       # Start your own worker by calling: PodcatApi.Worker.start_link(arg1, arg2, arg3)
       # worker(PodcatApi.Worker, [arg1, arg2, arg3]),
     ]

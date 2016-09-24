@@ -3,8 +3,6 @@ defmodule PodcatApi.Download.Job do
   Queue job.
   """
 
-  require Logger
-
   alias PodcatApi.Feed
 
   defstruct feed_id: nil, data: nil, priority: :low, started_at: nil, stopped_at: nil
@@ -31,4 +29,20 @@ defmodule PodcatApi.Download.Job do
 
   def new(%Feed{id: feed_id}, :high),
     do: %__MODULE__{feed_id: feed_id, priority: :high}
+end
+
+defimpl String.Chars, for: PodcatApi.Download.Job do
+  alias PodcatApi.Download.Job
+
+  def to_string(%Job{feed_id: id, stopped_at: nil}), do: "Job: #{id}"
+
+  def to_string(job) do
+    running_time = DateTime.to_unix(job.stopped_at) - DateTime.to_unix(job.started_at)
+
+    if running_time < 1 do
+      "Job: #{job.feed_id} (<1s)"
+    else
+      "Job: #{job.feed_id} (#{running_time}s)"
+    end
+  end
 end
