@@ -66,24 +66,6 @@ defmodule PodcatApi.Feed do
         |> unique_constraint(:feed_url, name: :feeds_feed_url_index)
 
   @doc """
-  Download and parse feed from url.
-  """
-  def download(%__MODULE__{feed_url: feed_url}), do: download(feed_url)
-
-  def download(url) do
-    {:ok, response} = @http_client.get(url)
-
-    xml =
-      response.body
-      |> Xml.from_string
-
-    case Parser.parse(xml) do
-      {:ok, feed} -> %{feed | feed_url: url}
-      :error -> nil
-    end
-  end
-
-  @doc """
   Get summary of the feed, with number of subscribers.
   """
   def summary do

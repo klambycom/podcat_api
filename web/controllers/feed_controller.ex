@@ -1,7 +1,7 @@
 defmodule PodcatApi.FeedController do
   use PodcatApi.Web, :controller
 
-  alias PodcatApi.{Feed, Subscription}
+  alias PodcatApi.{Feed, Subscription, Download}
 
   plug :scrub_params, "feed" when action in [:create]
 
@@ -36,43 +36,6 @@ defmodule PodcatApi.FeedController do
   end
 
   def index(conn, params), do: index(conn, Map.merge(%{"subscribers" => %{}}, params))
-
-  @doc """
-  Create a new feed from a url.
-
-  POST /feeds
-
-  ## TODO
-
-  - Remove?
-
-  ## Data
-
-  Content-Type: application/json
-
-  - `feed`, url to the feed.
-
-  ## Responses
-
-  - 201 Created
-  - 422 Unprocessable Entity
-  """
-  def create(conn, %{"feed" => url}) do
-    feed_params = Feed.download(url)
-    changeset = Feed.changeset(%Feed{}, feed_params)
-
-    case Repo.insert(changeset) do
-      {:ok, feed} ->
-        conn
-        |> put_status(:created)
-        |> put_resp_header("location", feed_path(conn, :show, feed))
-        |> render("show.json", feed: feed)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(PodcatApi.ChangesetView, "error.json", changeset: changeset)
-    end
-  end
 
   @doc """
   Show a feed with its items and the 5 newest subscribers.
@@ -118,8 +81,8 @@ defmodule PodcatApi.FeedController do
   - 404 Not found
   """
   def update(conn, %{"id" => id}) do
-    feed = Repo.get!(Feed, id)
-    spawn fn -> update_feed(feed) end
+    Repo.get!(Feed, id)
+    |> Download.feed
 
     conn
     |> send_resp(:accepted, "")
@@ -157,25 +120,6 @@ defmodule PodcatApi.FeedController do
       Feed.summary(user)
     else
       Feed.summary
-    end
-  end
-
-  defp update_feed(feed) do
-    data = Feed.download(feed)
-    Feed.changeset(feed, data) |> Repo.update!
-
-    data.items
-    |> Stream.map(&insert_item(feed.id, &1))
-    |> Enum.filter(&(&1)) # New items (TODO update playlists)
-  end
-
-  defp insert_item(feed_id, item) do
-    case Repo.get_by(Feed.Item, feed_id: feed_id, guid: item.guid) do
-      nil ->
-        Feed.Item.changeset_with_feed(feed_id, item) |> Repo.insert!
-      old_item ->
-        Feed.Item.changeset(old_item, item) |> Repo.update!
-        false
     end
   end
 end
