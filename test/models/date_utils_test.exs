@@ -66,4 +66,13 @@ defmodule PodcatApi.DateUtilsTest do
     date = %{@valid_date | utc_offset: -3600, time_zone: "Etc/GMT+1", zone_abbr: "GMT+1"}
     assert RFC2822.parse("19 May 2002 15:21:36 -0100") == date
   end
+
+  test "parse invalid RFC822 with full month" do
+    date = %{@valid_date | month: 4}
+    assert RFC2822.parse("19 April 2002 15:21:36 GMT") == date
+  end
+
+  test "parse invalid RFC822 with lowercase month" do
+    assert RFC2822.parse("19 may 2002 15:21:36 GMT") == @valid_date
+  end
 end

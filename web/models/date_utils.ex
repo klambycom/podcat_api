@@ -3,6 +3,15 @@ defmodule PodcatApi.DateUtils do
   Utils for working with date and time.
   """
 
+  @months %{
+    "jan" => 1, "feb" => 2, "mar" => 3, "apr" => 4,  "may" => 5,  "jun" => 6,
+    "jul" => 7, "aug" => 8, "sep" => 9, "oct" => 10, "nov" => 11, "dec" => 12,
+
+    "january"  => 1, "february"  => 2, "march"  => 3, "april"     => 4, "may"     => 5,
+    "june"     => 6, "july"      => 7, "august" => 8, "september" => 9, "october" => 10,
+    "november" => 11, "december" => 12
+  }
+
   defmodule RFC2822 do
     @modeledoc """
     RFC822/2822
@@ -13,8 +22,9 @@ defmodule PodcatApi.DateUtils do
     Day-of-week:
     - Mon, Tue, Wed, Thu, Fri, Sat, Sun
 
-    Month:
+    Month (should only be three letters):
     - Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
+    - January, February, March, April, May, June, July, August, September, October, November, December
 
     Timezone:
     - UT, GMT, EST, EDT, CST, CDT, MST, MDT, PST, PDT
@@ -59,7 +69,7 @@ defmodule PodcatApi.DateUtils do
     defp day({[<<dd::bytes-size(2)>> | _], _dt} = date), do: date |> set(%{day: to_integer(dd)})
 
     # Month: Jan, Feb, etc.
-    defp month({[<<month::bytes-size(3)>> | _], _dt} = date),
+    defp month({[month | _], _dt} = date),
       do: date |> set(%{month: DateUtils.month_to_integer(month)})
 
     # Year: yy (RFC822) or yyyy (RFC2822)
@@ -182,16 +192,5 @@ defmodule PodcatApi.DateUtils do
       iex> PodcatApi.DateUtils.month_to_integer("Apr")
       4
   """
-  def month_to_integer("Jan"), do: 1
-  def month_to_integer("Feb"), do: 2
-  def month_to_integer("Mar"), do: 3
-  def month_to_integer("Apr"), do: 4
-  def month_to_integer("May"), do: 5
-  def month_to_integer("Jun"), do: 6
-  def month_to_integer("Jul"), do: 7
-  def month_to_integer("Aug"), do: 8
-  def month_to_integer("Sep"), do: 9
-  def month_to_integer("Oct"), do: 10
-  def month_to_integer("Nov"), do: 11
-  def month_to_integer("Dec"), do: 12
+  def month_to_integer(text), do: @months[String.downcase(text)]
 end
