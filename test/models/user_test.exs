@@ -1,7 +1,9 @@
 defmodule PodcatApi.UserTest do
   use PodcatApi.ModelCase
 
-  alias PodcatApi.User
+  alias PodcatApi.{User, PlaylistItem}
+  alias PodcatApi.{Repo, Feed}
+
   doctest PodcatApi.User
 
   @valid_attrs %{name: "Foo Bar", email: "foo@bar.com", password: "some content"}
@@ -73,5 +75,44 @@ defmodule PodcatApi.UserTest do
       |> User.gravatar_url(200)
 
     assert url == "https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346?d=identicon&s=200"
+  end
+
+  test "add playlist item to user", %{user: user} do
+    feed_changeset =
+      Feed.changeset(
+        %Feed{},
+        %{
+          title: "test",
+          author: "test",
+          summary: "test",
+          feed_url: "test"
+        }
+      )
+    assert feed_changeset.valid?
+    feed = Repo.insert!(feed_changeset)
+
+    item_changeset =
+      Feed.Item.changeset(
+        %Feed.Item{},
+        %{
+          guid: "testjkfd",
+          title: "Test",
+          feed_id: feed.id,
+          enclosure: %{url: "fdas", length: 123, type: "mp3"}
+        }
+      )
+    assert item_changeset.valid?
+    item = Repo.insert!(item_changeset)
+
+    changeset = PlaylistItem.changeset(
+      %PlaylistItem{},
+      %{
+        user_id: user.id,
+        feed_item_id: item.uuid
+      }
+    )
+    assert changeset.valid?
+
+    Repo.insert!(changeset)
   end
 end

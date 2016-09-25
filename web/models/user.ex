@@ -1,7 +1,7 @@
 defmodule PodcatApi.User do
   use PodcatApi.Web, :model
 
-  alias PodcatApi.{Feed, Subscription}
+  alias PodcatApi.{Feed, Subscription, PlaylistItem}
 
   @email_regex ~r/\S+@\S+\.\S+/
 
@@ -14,6 +14,7 @@ defmodule PodcatApi.User do
     field :password, :string, virtual: true
 
     many_to_many :subscriptions, Feed, join_through: Subscription
+    has_many :playlist_items, PlaylistItem
 
     timestamps
   end
