@@ -55,4 +55,12 @@ defmodule PodcatApi.Subscription do
       order_by: [desc: :inserted_at],
       limit: ^limit
   end
+
+  @doc """
+  Get all subscriptions from feed id.
+  """
+  def feed_id(feed_id) do
+    from s in __MODULE__,
+      where: s.feed_id == ^feed_id
+  end
 end

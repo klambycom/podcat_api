@@ -6,7 +6,8 @@ defmodule PodcatApi.Download.Task do
   @callback run(map) :: tuple
 
   @tasks [
-    PodcatApi.Download.Task.Update
+    PodcatApi.Download.Task.Update,
+    PodcatApi.Download.Task.Playlist
   ]
 
   def run_all(job, tasks \\ @tasks) do
