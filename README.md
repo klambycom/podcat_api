@@ -1,4 +1,4 @@
-# PodcatApi
+# PodcatApi [![Build Status](https://travis-ci.org/klambycom/podcat_api.svg?branch=master)](https://travis-ci.org/klambycom/podcat_api)
 
 To start your Phoenix app:
 
