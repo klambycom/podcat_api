@@ -12,7 +12,7 @@ config :logger, level: :warn
 # Configure your database
 config :podcat_api, PodcatApi.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "dev",
+  username: "postgres",
   password: "",
   database: "podcat_api_test",
   hostname: "localhost",
