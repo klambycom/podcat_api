@@ -36,7 +36,8 @@ defmodule PodcatApi.Mixfile do
         :corsica,
         :poolboy,
         :guardian,
-        :mogrify
+        :mogrify,
+        :edeliver
       ]
     ]
   end
@@ -66,7 +67,8 @@ defmodule PodcatApi.Mixfile do
       {:ex_doc, "~> 0.12", only: :dev},
       {:corsica, "~> 0.4"},
       {:poolboy, "~> 1.5"},
-      {:exrm, "~> 1.0"}
+      {:exrm, "~> 1.0"},
+      {:edeliver, "~> 1.4.0"}
     ]
   end
 

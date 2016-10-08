@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+APP="podcat_api"
+
+BUILD_HOST="95.85.33.102"
+BUILD_USER="root"
+BUILD_AT="/root/builds"
+
+STAGING_HOSTS="95.85.33.102"
+STAGING_USER="root"
+DELIVER_TO="/root/staging"
+
+pre_erlang_get_and_update_deps() {
+	local _prod_secret_path="/root/prod.secret.exs"
+	if [ "$TARGET_MIX_ENV" = "prod" ]; then
+		__sync_remote "
+			ln -sfn '$_prod_secret_path' '$BUILD_AT/config/prod.secret.exs'
+		"
+	fi
+}
