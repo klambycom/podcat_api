@@ -6,9 +6,9 @@ BUILD_HOST="95.85.33.102"
 BUILD_USER="root"
 BUILD_AT="/root/builds"
 
-STAGING_HOSTS="95.85.33.102"
-STAGING_USER="root"
-DELIVER_TO="/root/staging"
+PRODUCTION_HOSTS="95.85.33.102"
+PRODUCTION_USER="root"
+DELIVER_TO="/root/web"
 
 pre_erlang_get_and_update_deps() {
 	local _prod_secret_path="/root/prod.secret.exs"
