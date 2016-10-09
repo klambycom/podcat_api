@@ -24,6 +24,7 @@ defmodule PodcatApi.Router do
 
     resources "/users", UserController, except: [:new, :edit] do
       resources "/subscriptions", SubscriptionController, only: [:index]
+      get "/queue", QueueController, :index
     end
 
     get "/search", SearchController, :search
