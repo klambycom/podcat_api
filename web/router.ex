@@ -20,10 +20,11 @@ defmodule PodcatApi.Router do
       post "/subscribe", SubscriptionController, :create
       delete "/unsubscribe", SubscriptionController, :delete
       get "/image", ImageController, :show
+      resources "/items", ItemController, only: [:show]
     end
 
     resources "/users", UserController, except: [:new, :edit] do
-      resources "/subscriptions", SubscriptionController, only: [:index]
+      get "/subscriptions", SubscriptionController, :index
       get "/queue", QueueController, :index
     end
 

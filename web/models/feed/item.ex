@@ -5,6 +5,7 @@ defmodule PodcatApi.Feed.Item do
   alias PodcatApi.Feed.{Explicit, Enclosure, Duration}
   alias PodcatApi.Xml.ItunesParser
 
+  @derive {Phoenix.Param, key: :uuid}
   @primary_key false
   schema "feed_items" do
     field :uuid, Ecto.UUID, autogenerate: true
