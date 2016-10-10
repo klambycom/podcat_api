@@ -15,7 +15,7 @@ defmodule PodcatApi.QueueController do
   def index(conn, %{"user_id" => user_id}) do
     user =
       Repo.get(User, user_id)
-      |> Repo.preload(playlist_items: :feed_item)
+      |> Repo.preload([{:playlist_items, [{:feed_item, :feed}]}])
 
     render(conn, "index.json", user: user)
   end

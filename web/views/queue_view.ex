@@ -32,7 +32,7 @@ defmodule PodcatApi.QueueView do
     do: %{
       id: queue_item.id,
       automatically_added: queue_item.automatically_added,
-      item: render_one(queue_item.feed_item, ItemView, "item.json", conn: conn),
+      item: render_one(queue_item.feed_item, ItemView, "show.json", conn: conn),
       meta: %{
         queued_at: queue_item.inserted_at
       }
