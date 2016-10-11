@@ -71,6 +71,13 @@ defmodule PodcatApi.Web do
     end
   end
 
+  def graphql do
+    quote do
+      alias GraphQL.Type.{ObjectType, List, NonNull, ID, String, Int, Boolean}
+      alias PodcatApi.Repo
+    end
+  end
+
   @doc """
   When used, dispatch to the appropriate controller/view/etc.
   """

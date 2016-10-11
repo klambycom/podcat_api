@@ -37,7 +37,8 @@ defmodule PodcatApi.Mixfile do
         :poolboy,
         :guardian,
         :mogrify,
-        :edeliver
+        :edeliver,
+        :plug_graphql
       ]
     ]
   end
@@ -68,7 +69,8 @@ defmodule PodcatApi.Mixfile do
       {:corsica, "~> 0.4"},
       {:poolboy, "~> 1.5"},
       {:exrm, "~> 1.0"},
-      {:edeliver, "~> 1.4.0"}
+      {:edeliver, "~> 1.4.0"},
+      {:plug_graphql, "~> 0.3.1"}
     ]
   end
 
