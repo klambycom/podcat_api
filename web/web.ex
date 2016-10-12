@@ -73,7 +73,7 @@ defmodule PodcatApi.Web do
 
   def graphql do
     quote do
-      alias GraphQL.Type.{ObjectType, List, NonNull, ID, String, Int, Boolean}
+      alias GraphQL.Type.{ObjectType, List, NonNull, ID, String, Int, Boolean, Enum}
       alias PodcatApi.Repo
     end
   end

@@ -1,5 +1,7 @@
-defmodule PodcatApi.GraphQL.Podcast do
+defmodule PodcatApi.GraphQL.PodcastType do
   use PodcatApi.Web, :graphql
+  alias PodcatApi.GraphQL.EpisodeType
+  alias PodcatApi.Feed
   import PodcatApi.Router.Helpers
 
   def type do
@@ -61,6 +63,21 @@ defmodule PodcatApi.GraphQL.Podcast do
             }
           },
           resolve: {__MODULE__, :image}
+        },
+        episodes: %{
+          type: %List{ofType: EpisodeType},
+          description: "Podcast items",
+          args: %{
+            limit: %{
+              type: %Int{},
+              description: "Number of items"
+            },
+            offset: %{
+              type: %Int{},
+              description: "Offset to start on"
+            }
+          },
+          resolve: {__MODULE__, :items}
         }
       }
     }
@@ -68,4 +85,39 @@ defmodule PodcatApi.GraphQL.Podcast do
 
   def image(feed, %{size: size}, context),
     do: feed_image_url(context[:root_value][:conn], :show, feed, size: size)
+
+  def items(feed, params, _context) do
+    limit = Map.get(params, :limit, 10)
+    offset = Map.get(params, :offset, 0)
+
+    result = 
+      feed
+      |> Repo.preload(items: Feed.Item.latest(limit, offset))
+
+    result.items
+  end
+
+  def dsa do
+    %{
+      author: nil,
+      block: false,
+      copyright: nil,
+      description: "Latest posts in tag Elixir on Medium",
+      explicit: :no,
+      feed_url: "https://medium.com/feed/tag/elixir",
+      id: 1,
+      image_url: nil,
+      inserted_at: nil,
+      items: :not_loaded,
+      link: "https://medium.com/tag/elixir/latest?source=rss------elixir-5",
+      subscribed_at: nil,
+      subscriber_count: 2,
+      subscribers: :not_loaded,
+      subtitle: nil,
+      summary: "Elixir on Medium",
+      title: nil,
+      updated_at: nil,
+      users: :not_loaded
+    }
+  end
 end
