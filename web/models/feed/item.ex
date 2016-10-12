@@ -122,4 +122,10 @@ defmodule PodcatApi.Feed.Item do
           order_by: [desc: :published_at],
           limit: ^limit,
           offset: ^offset
+
+  @doc """
+  Get a string representation of the duration.
+  """
+  def duration(%__MODULE__{duration: {hour, minute, second}}),
+    do: "#{hour}:#{String.rjust("#{minute}", 2, ?0)}:#{String.rjust("#{second}", 2, ?0)}"
 end
