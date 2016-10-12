@@ -2,7 +2,7 @@ defmodule PodcatApi.GraphQL.RootSchema do
   use PodcatApi.Web, :graphql
 
   alias PodcatApi.Feed
-  alias PodcatApi.GraphQL.{RootSchema, Podcast}
+  alias PodcatApi.GraphQL.{RootSchema, PodcastType}
 
   defmodule Query do
     def type do
@@ -11,7 +11,7 @@ defmodule PodcatApi.GraphQL.RootSchema do
         description: "All the queries available to the client",
         fields: %{
           podcast: %{
-            type: Podcast,
+            type: PodcastType,
             description: "Get a podcast",
             args: %{
               id: %{
