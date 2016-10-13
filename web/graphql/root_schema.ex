@@ -47,27 +47,20 @@ defmodule PodcatApi.GraphQL.RootSchema do
       }
     end
 
-    def podcast(_, %{id: id}, _) do
-      Repo.get!(Feed.summary, id)
-    end
+    def podcast(_, %{id: id}, _),
+      do: Repo.get!(Feed.summary, id)
 
-    def episode(_, %{id: id}, _) do
-      Repo.get_by!(Feed.Item, uuid: id)
-    end
+    def episode(_, %{id: id}, _),
+      do: Repo.get_by!(Feed.Item, uuid: id)
 
     def user(_, %{id: id}, _),
       do: Repo.get!(User, id)
 
-    def user(_, _, _) do
-      # TODO Current user!
-    end
+    def user(_, _, context),
+      do: Guardian.Plug.current_resource(context[:root_value][:conn])
   end
 
-  def schema do
-    %GraphQL.Schema{query: Query.type}
-  end
+  def schema, do: %GraphQL.Schema{query: Query.type}
 
-  def root_value(conn) do
-    %{conn: conn}
-  end
+  def root_value(conn), do: %{conn: conn}
 end
