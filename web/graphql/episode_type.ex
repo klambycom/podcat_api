@@ -47,27 +47,17 @@ defmodule PodcatApi.GraphQL.EpisodeType do
           description: "The episode file",
           resolve: {__MODULE__, :enclosure}
         },
-        datetime: %{
-          type: %String{},
+        datetime: DateTime.new(%{
           description: "Date and time of first or latest fetch, or published in feed",
-          args: %{
-            field: %{
-              type: Enum.new(%{
-                name: "Field",
-                values: %{
-                  "PUBLISHED": %{value: :published_at},
-                  "UPDATED": %{value: :updated_at},
-                  "INSERTED": %{value: :inserted_at},
-                }
-              })
-            },
-            format: %{
-              type: %String{},
-              description: "Format the date and time"
+          type: Enum.new(%{
+            name: "EpisodeDateTime",
+            values: %{
+              "PUBLISHED": %{value: :published_at},
+              "UPDATED": %{value: :updated_at},
+              "INSERTED": %{value: :inserted_at},
             }
-          },
-          resolve: {__MODULE__, :datetime}
-        },
+          })
+        }),
         podcast: %{
           type: PodcastType,
           description: "The podcast that the episode belongs to",
@@ -82,14 +72,6 @@ defmodule PodcatApi.GraphQL.EpisodeType do
   def duration(item, _, _), do: Feed.Item.duration(item)
 
   def enclosure(item, _, _), do: item.enclosure
-
-  def datetime(item, args, _) do
-    field = Map.get(args, :field, :published_at)
-    format = Map.get(args, :format, "{YYYY}-{0M}-{D} {h24}:{m}:{s}")
-
-    Map.get(item, field)
-    |> Timex.format!(format)
-  end
 
   def podcast(item, _, _) do
     result = item |> Repo.preload(:feed)
