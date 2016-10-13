@@ -1,8 +1,8 @@
 defmodule PodcatApi.GraphQL.RootSchema do
   use PodcatApi.Web, :graphql
 
-  alias PodcatApi.Feed
-  alias PodcatApi.GraphQL.{RootSchema, PodcastType, EpisodeType}
+  alias PodcatApi.{Feed, User}
+  alias PodcatApi.GraphQL.{RootSchema, PodcastType, EpisodeType, UserType}
 
   defmodule Query do
     def type do
@@ -31,6 +31,17 @@ defmodule PodcatApi.GraphQL.RootSchema do
               }
             },
             resolve: {__MODULE__, :episode}
+          },
+          user: %{
+            type: UserType,
+            description: "A user",
+            args: %{
+              id: %{
+                type: %ID{},
+                description: "ID of the user"
+              }
+            },
+            resolve: {__MODULE__, :user}
           }
         }
       }
@@ -42,6 +53,13 @@ defmodule PodcatApi.GraphQL.RootSchema do
 
     def episode(_, %{id: id}, _) do
       Repo.get_by!(Feed.Item, uuid: id)
+    end
+
+    def user(_, %{id: id}, _),
+      do: Repo.get!(User, id)
+
+    def user(_, _, _) do
+      # TODO Current user!
     end
   end
 
