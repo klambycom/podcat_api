@@ -1,7 +1,9 @@
 defmodule PodcatApi.GraphQL.PodcastType do
   use PodcatApi.Web, :graphql
-  alias PodcatApi.GraphQL.EpisodeType
-  alias PodcatApi.Feed
+
+  alias PodcatApi.GraphQL.{EpisodeType, SubscriptionType}
+  alias PodcatApi.{Feed, Subscription}
+
   import PodcatApi.Router.Helpers
 
   def type do
@@ -78,6 +80,34 @@ defmodule PodcatApi.GraphQL.PodcastType do
             }
           },
           resolve: {__MODULE__, :items}
+        },
+        subscribers: %{
+          type: %List{ofType: SubscriptionType},
+          description: "Find latest users subscribed to this podcast (via subscription)",
+          args: %{
+            limit: %{
+              type: %Int{},
+              description: "Number of users"
+            },
+            offset: %{
+              type: %Int{}
+            }
+          },
+          resolve: {__MODULE__, :subscribers}
+        },
+        datetime: DateTime.new(%{
+          description: "Date and time of when the podcast was inserted or updated",
+          type: Enum.new(%{
+            name: "PodcastDateTime",
+            values: %{
+              "UPDATED": %{value: :updated_at},
+              "INSERTED": %{value: :inserted_at},
+            }
+          })
+        }),
+        link: %{
+          type: %String{},
+          description: "Link to the homepage of the podcast"
         }
       }
     }
@@ -97,27 +127,14 @@ defmodule PodcatApi.GraphQL.PodcastType do
     result.items
   end
 
-  def dsa do
-    %{
-      author: nil,
-      block: false,
-      copyright: nil,
-      description: "Latest posts in tag Elixir on Medium",
-      explicit: :no,
-      feed_url: "https://medium.com/feed/tag/elixir",
-      id: 1,
-      image_url: nil,
-      inserted_at: nil,
-      items: :not_loaded,
-      link: "https://medium.com/tag/elixir/latest?source=rss------elixir-5",
-      subscribed_at: nil,
-      subscriber_count: 2,
-      subscribers: :not_loaded,
-      subtitle: nil,
-      summary: "Elixir on Medium",
-      title: nil,
-      updated_at: nil,
-      users: :not_loaded
-    }
+  def subscribers(feed, params, _) do
+    limit = Map.get(params, :limit, 5)
+    offset = Map.get(params, :offset, 0)
+
+    result =
+      feed
+      |> Repo.preload(subscribers: {Subscription.latest(limit, offset), :user})
+
+    result.subscribers
   end
 end

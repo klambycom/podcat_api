@@ -50,10 +50,11 @@ defmodule PodcatApi.Subscription do
   @doc """
   Get the latest subscribers.
   """
-  def latest(limit \\ 5) do
+  def latest(limit \\ 5, offset \\ 0) do
     from s in __MODULE__,
       order_by: [desc: :inserted_at],
-      limit: ^limit
+      limit: ^limit,
+      offset: ^offset
   end
 
   @doc """
