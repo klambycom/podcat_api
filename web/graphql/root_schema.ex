@@ -2,7 +2,7 @@ defmodule PodcatApi.GraphQL.RootSchema do
   use PodcatApi.Web, :graphql
 
   alias PodcatApi.{Feed, User}
-  alias PodcatApi.GraphQL.{RootSchema, PodcastType, EpisodeType, UserType}
+  alias PodcatApi.GraphQL.{RootSchema, PodcastType, EpisodeType, UserType, QueueItemType}
 
   defmodule Query do
     def type do
@@ -34,7 +34,9 @@ defmodule PodcatApi.GraphQL.RootSchema do
           },
           user: %{
             type: UserType,
-            description: "A user",
+            description: """
+            Get a user from the id, or the current user when id is not used.
+            """,
             args: %{
               id: %{
                 type: %ID{},
@@ -42,6 +44,15 @@ defmodule PodcatApi.GraphQL.RootSchema do
               }
             },
             resolve: {__MODULE__, :user}
+          },
+          queue: %{
+            type: %List{ofType: QueueItemType},
+            description: """
+            The play queue for the current user (the user needs to be
+            authenticated). It is not possible to get the queue of another
+            user.
+            """,
+            resolve: {__MODULE__, :queue}
           }
         }
       }
@@ -58,6 +69,14 @@ defmodule PodcatApi.GraphQL.RootSchema do
 
     def user(_, _, context),
       do: Guardian.Plug.current_resource(context[:root_value][:conn])
+
+    def queue(_, _, context) do
+      user =
+        Guardian.Plug.current_resource(context[:root_value][:conn])
+        |> Repo.preload([{:playlist_items, [{:feed_item, :feed}]}])
+
+      user.playlist_items
+    end
   end
 
   def schema, do: %GraphQL.Schema{query: Query.type}
