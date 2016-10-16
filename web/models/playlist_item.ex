@@ -21,4 +21,18 @@ defmodule PodcatApi.PlaylistItem do
     |> cast(params, [:automatically_added, :user_id, :feed_item_id])
     |> validate_required([:automatically_added, :user_id, :feed_item_id])
   end
+
+  @doc """
+  Filter out automatically added playlist items or just playlist items
+  added by the user.
+  """
+  def filter(limit, offset, auto \\ false) do
+    from p in __MODULE__,
+      where: p.automatically_added == ^auto,
+      join: u in assoc(p, :user),
+      join: i in assoc(p, :feed_item),
+      limit: ^limit,
+      offset: ^offset,
+      preload: [user: u, feed_item: i]
+  end
 end
