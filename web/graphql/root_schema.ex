@@ -1,8 +1,8 @@
 defmodule PodcatApi.GraphQL.RootSchema do
   use PodcatApi.Web, :graphql
 
-  alias PodcatApi.{Feed, User}
-  alias PodcatApi.GraphQL.{RootSchema, PodcastType, EpisodeType, UserType, QueueItemType}
+  alias PodcatApi.{Feed, User, PlaylistItem}
+  alias PodcatApi.GraphQL.{PodcastType, EpisodeType, UserType, QueueItemType}
 
   defmodule Query do
     def type do
@@ -52,6 +52,23 @@ defmodule PodcatApi.GraphQL.RootSchema do
             authenticated). It is not possible to get the queue of another
             user.
             """,
+            args: %{
+              filter: %{
+                type: Enum.new(%{
+                  name: "QueueFilterAlternatives",
+                  values: %{
+                    "USER_ADDED": %{value: :user},
+                    "AUTO_ADDED": %{value: :auto}
+                  }
+                }),
+                description: """
+                Filter queue by episodes added by the user or automatically
+                from downloading and updating feed.
+                """
+              },
+              limit: %{type: %Int{}},
+              offset: %{type: %Int{}}
+            },
             resolve: {__MODULE__, :queue}
           }
         }
@@ -70,10 +87,16 @@ defmodule PodcatApi.GraphQL.RootSchema do
     def user(_, _, context),
       do: Guardian.Plug.current_resource(context[:root_value][:conn])
 
-    def queue(_, _, context) do
+    def queue(_, args, context) do
+      filter = Map.get(args, :filter, :user)
+      limit = Map.get(args, :limit, 20)
+      offset = Map.get(args, :offset, 0)
+
       user =
         Guardian.Plug.current_resource(context[:root_value][:conn])
-        |> Repo.preload([{:playlist_items, [{:feed_item, :feed}]}])
+        |> Repo.preload(
+             playlist_items: PlaylistItem.filter(limit, offset, filter == :auto)
+           )
 
       user.playlist_items
     end
