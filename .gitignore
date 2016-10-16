@@ -17,6 +17,5 @@ erl_crash.dump
 /config/prod.secret.exs
 
 # Deployment
-/rel
-!/rel/config.exs
+/rel/podcat_api
 .deliver/releases/
