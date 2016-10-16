@@ -2,10 +2,8 @@ defmodule PodcatApi.Feed do
   use PodcatApi.Web, :model
 
   alias PodcatApi.{User, Subscription}
-  alias PodcatApi.Xml
   alias PodcatApi.Xml.ItunesParser.Podcast
   alias PodcatApi.Feed.{Explicit, Item}
-  alias PodcatApi.Parser
 
   @http_client Application.get_env(:podcat_api, :http_client)
 
