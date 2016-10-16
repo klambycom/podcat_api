@@ -18,4 +18,5 @@ erl_crash.dump
 
 # Deployment
 /rel
+!/rel/config.exs
 .deliver/releases/
