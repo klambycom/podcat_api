@@ -70,7 +70,8 @@ defmodule PodcatApi.Mixfile do
       {:poolboy, "~> 1.5"},
       {:distillery, "~> 0.10.1", warn_missing: false},
       {:edeliver, "~> 1.4.0"},
-      {:plug_graphql, "~> 0.3.1"}
+      {:plug_graphql, "~> 0.3.1"},
+      {:absinthe_plug, "~> 1.1"}
     ]
   end
 
