@@ -10,6 +10,10 @@ defmodule PodcatApi.Router do
     plug Guardian.Plug.LoadResource
   end
 
+  pipeline :graphql do
+    plug PodcatApi.Plug.Conn
+  end
+
   scope "/api", PodcatApi do
     pipe_through [:api, :api_auth]
 
@@ -40,7 +44,7 @@ defmodule PodcatApi.Router do
   end
 
   scope "/graphql" do
-    pipe_through [:api, :api_auth]
+    pipe_through [:api, :api_auth, :graphql]
 
     forward "/", Absinthe.Plug,
       schema: PodcatApi.Schema

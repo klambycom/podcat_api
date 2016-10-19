@@ -23,6 +23,10 @@ defmodule PodcatApi.Schema.Types do
     field :updated_at, :time
     field :inserted_at, :time
     field :link, :string
+    field :image, :string do
+      arg :size, non_null(:integer)
+      resolve &Resolver.Episode.image/2
+    end
   end
 
   @desc "A episode"
