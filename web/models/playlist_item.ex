@@ -31,8 +31,9 @@ defmodule PodcatApi.PlaylistItem do
       where: p.automatically_added == ^auto,
       join: u in assoc(p, :user),
       join: i in assoc(p, :feed_item),
+        join: f in assoc(i, :feed),
       limit: ^limit,
       offset: ^offset,
-      preload: [user: u, feed_item: i]
+      preload: [user: u, feed_item: {i, feed: f}]
   end
 end

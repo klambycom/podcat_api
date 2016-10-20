@@ -1,5 +1,5 @@
 defmodule PodcatApi.Resolver.Podcast do
-  alias PodcatApi.{Repo, Feed}
+  alias PodcatApi.{Repo, Feed, Subscription}
 
   @doc """
   Find podcast from id.
@@ -21,4 +21,7 @@ defmodule PodcatApi.Resolver.Podcast do
       %Feed.Item{feed: feed} -> {:ok, feed}
     end
   end
+
+  def find(%{}, %{source: %Subscription{} = subscription}),
+    do: {:ok, subscription.feed}
 end
