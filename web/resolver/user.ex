@@ -11,10 +11,11 @@ defmodule PodcatApi.Resolver.User do
     end
   end
 
-  def find(%{}, %{context: %{user: %User{} = user}}), do: {:ok, user}
-
   def find(%{}, %{source: %Subscription{} = subscription}),
     do: {:ok, subscription.user}
+
+  def find(%{}, %{context: %{conn: conn}}),
+    do: {:ok, Guardian.Plug.current_resource(conn)}
 
   @doc """
   Avatar from gravatar.

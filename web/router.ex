@@ -12,7 +12,6 @@ defmodule PodcatApi.Router do
 
   pipeline :graphql do
     plug PodcatApi.Plug.Conn
-    plug PodcatApi.Plug.User
   end
 
   scope "/api", PodcatApi do
