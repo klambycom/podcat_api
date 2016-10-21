@@ -3,7 +3,7 @@ defmodule PodcatApi.Mixfile do
 
   def project do
     [app: :podcat_api,
-     version: "0.2.2",
+     version: "0.2.3",
      name: "Podcat API",
      homepage_url: "http://podcat.ninja",
      elixir: "~> 1.2",
@@ -69,7 +69,8 @@ defmodule PodcatApi.Mixfile do
       {:poolboy, "~> 1.5"},
       {:distillery, "~> 0.10.1", warn_missing: false},
       {:edeliver, "~> 1.4.0"},
-      {:absinthe_plug, "~> 1.1"}
+      {:absinthe_plug, "~> 1.1"},
+      {:logger_file_backend, "~> 0.0.9"}
     ]
   end
 

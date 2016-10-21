@@ -19,7 +19,20 @@ config :podcat_api, PodcatApi.Endpoint,
   version: Mix.Project.config[:version]
 
 # Do not print debug messages in production
-config :logger, level: :info
+config :logger,
+  backends: [
+    {LoggerFileBackend, :info_log},
+    {LoggerFileBackend, :error_log},
+    :console
+  ]
+
+config :logger, :info_log,
+  path: "/root/log/podcat_api/info.log",
+  level: :info
+
+config :logger, :error_log,
+  path: "/root/log/podcat_api/error.log",
+  level: :error
 
 # ## SSL Support
 #
