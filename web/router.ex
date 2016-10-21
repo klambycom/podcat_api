@@ -35,14 +35,6 @@ defmodule PodcatApi.Router do
     get "/search", SearchController, :search
   end
 
-  scope "/graphql2" do
-    pipe_through [:api, :api_auth]
-
-    forward "/", GraphQL.Plug,
-      schema: {PodcatApi.GraphQL.RootSchema, :schema},
-      root_value: {PodcatApi.GraphQL.RootSchema, :root_value}
-  end
-
   scope "/graphql" do
     pipe_through [:api, :api_auth, :graphql]
 
