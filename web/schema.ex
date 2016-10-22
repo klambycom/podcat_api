@@ -5,7 +5,7 @@ defmodule PodcatApi.Schema do
   import_types PodcatApi.Schema.Types
 
   query do
-    @doc """
+    @desc """
     A podcast.
     """
     field :podcast, type: :podcast do
@@ -13,7 +13,17 @@ defmodule PodcatApi.Schema do
       resolve &Resolver.Podcast.find/2
     end
 
-    @doc """
+    @desc """
+    Get several podcasts using different filters.
+    """
+    field :podcasts, type: list_of(:podcast) do
+      arg :limit, non_null(:integer)
+      arg :offset, :integer
+      arg :filter, non_null(:podcast_filter)
+      resolve &Resolver.Podcast.all/2
+    end
+
+    @desc """
     Get the user from a id, or the current user when id is not
     used.
     """
@@ -22,7 +32,7 @@ defmodule PodcatApi.Schema do
       resolve &Resolver.User.find/2
     end
 
-    @doc """
+    @desc """
     The play queue for the current user (the user needs to be
     authenticated). It is not possible to get the queue of
     another user.

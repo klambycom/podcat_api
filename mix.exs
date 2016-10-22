@@ -3,7 +3,7 @@ defmodule PodcatApi.Mixfile do
 
   def project do
     [app: :podcat_api,
-     version: "0.2.3",
+     version: "0.2.4",
      name: "Podcat API",
      homepage_url: "http://podcat.ninja",
      elixir: "~> 1.2",

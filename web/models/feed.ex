@@ -81,4 +81,14 @@ defmodule PodcatApi.Feed do
       select: %{f | subscriber_count: count(u.id), subscribed_at: s.inserted_at},
       group_by: [f.id, s.inserted_at]
   end
+
+  @doc """
+  Get the latest subscribers.
+  """
+  def newest(limit \\ 5, offset \\ 0) do
+    from f in __MODULE__,
+      order_by: [desc: :inserted_at],
+      limit: ^limit,
+      offset: ^offset
+  end
 end

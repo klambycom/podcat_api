@@ -106,4 +106,8 @@ defmodule PodcatApi.Schema.Types do
     value :user_added
     value :auto_added
   end
+
+  enum :podcast_filter do
+    value :newest
+  end
 end
