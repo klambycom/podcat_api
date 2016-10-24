@@ -36,6 +36,6 @@ defmodule PodcatApi.Endpoint do
     key: "_podcat_api_key",
     signing_salt: "ObvwtPb3"
 
-  plug Corsica, origins: "*"
+  plug Corsica, origins: "*", allow_headers: ["content-type"]
   plug PodcatApi.Router
 end
