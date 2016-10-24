@@ -37,7 +37,8 @@ defmodule PodcatApi.Mixfile do
         :poolboy,
         :guardian,
         :mogrify,
-        :edeliver
+        :edeliver,
+        :absinthe_relay
       ]
     ]
   end
@@ -70,7 +71,8 @@ defmodule PodcatApi.Mixfile do
       {:distillery, "~> 0.10.1", warn_missing: false},
       {:edeliver, "~> 1.4.0"},
       {:absinthe_plug, "~> 1.1"},
-      {:logger_file_backend, "~> 0.0.9"}
+      {:logger_file_backend, "~> 0.0.9"},
+      {:absinthe_relay, "~> 0.9.2"}
     ]
   end
 
