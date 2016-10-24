@@ -1,10 +1,29 @@
 defmodule PodcatApi.Schema do
   use Absinthe.Schema
+  use Absinthe.Relay.Schema
+
   alias PodcatApi.Resolver
+  alias PodcatApi.{Feed, User}
 
   import_types PodcatApi.Schema.Types
 
+  node interface do
+    resolve_type fn
+      %Feed{}, _ -> :podcast
+      %User{}, _ -> :user
+    end
+  end
+
   query do
+    node field do
+      %{type: :podcast, id: id}, _ ->
+        Resolver.Podcast.find(%{id: id}, %{})
+      %{type: :user, id: id}, _ ->
+        Resolver.User.find(%{id: id}, %{})
+      _, _ ->
+        nil
+    end
+
     @desc """
     A podcast.
     """

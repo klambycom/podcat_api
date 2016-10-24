@@ -1,9 +1,11 @@
 defmodule PodcatApi.Schema.Types do
   use Absinthe.Schema.Notation
+  use Absinthe.Relay.Schema.Notation
+
   alias PodcatApi.{Resolver, Feed}
 
   @desc "A podcast"
-  object :podcast do
+  node object :podcast do
     field :id, :id
     field :title, :string
     field :subtitle, :string
@@ -55,7 +57,7 @@ defmodule PodcatApi.Schema.Types do
   end
 
   @desc "A user"
-  object :user do
+  node object :user do
     field :id, :id
     field :name, :string
     field :image, :string do
