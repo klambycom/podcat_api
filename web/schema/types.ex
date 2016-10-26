@@ -6,7 +6,9 @@ defmodule PodcatApi.Schema.Types do
 
   @desc "A podcast"
   node object :podcast do
-    field :id, :id
+    field :slug, :id do
+      resolve fn _, %{source: podcast} -> {:ok, podcast.id} end # TODO Real slug!
+    end
     field :title, :string
     field :subtitle, :string
     field :summary, :string
@@ -64,8 +66,22 @@ defmodule PodcatApi.Schema.Types do
       arg :size, non_null(:integer)
       resolve &Resolver.User.image/2
     end
+
+    @desc """
+    Get subscriptions from the user.
+    """
     field :subscriptions, type: list_of(:user_subscription) do
       resolve &Resolver.Subscription.all/2
+    end
+
+    @desc """
+    Get several podcasts using different filters.
+    """
+    field :recommendations, type: list_of(:podcast) do
+      arg :limit, non_null(:integer)
+      arg :offset, :integer
+      arg :filter, non_null(:podcast_filter)
+      resolve &Resolver.Podcast.all/2
     end
   end
 

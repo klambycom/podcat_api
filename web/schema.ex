@@ -33,16 +33,6 @@ defmodule PodcatApi.Schema do
     end
 
     @desc """
-    Get several podcasts using different filters.
-    """
-    field :podcasts, type: list_of(:podcast) do
-      arg :limit, non_null(:integer)
-      arg :offset, :integer
-      arg :filter, non_null(:podcast_filter)
-      resolve &Resolver.Podcast.all/2
-    end
-
-    @desc """
     Get the user from a id, or the current user when id is not
     used.
     """
